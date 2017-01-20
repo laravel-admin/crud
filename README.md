@@ -58,7 +58,6 @@ The only thing you have to do is defining your fields and validation. Herefore y
 
 * getValidationRulesOnStore
 * getValidationRulesOnUpdate
-
 * getFieldsForCreate
 * getFieldsForEdit
 * getFieldsForList

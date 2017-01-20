@@ -4,5 +4,10 @@
     "type": "Laravel Package",
     "license": "MIT",
     "minimum-stability": "dev",
-    "require": {}
+    "require": {},
+	"autoload": {
+	   "psr-4": {
+		   "LaravelAdmin\\Crud\\": "src"
+		}
+   }
 }

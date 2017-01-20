@@ -1,0 +1,8 @@
+{
+    "name": "laravel-admin/crud",
+    "description": "Crud Package for Laravel Admin",
+    "type": "Laravel Package",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {}
+}

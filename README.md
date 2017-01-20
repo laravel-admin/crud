@@ -32,7 +32,7 @@ LaravelAdmin\Crud\CrudServiceProvider::class,
 First create migratio, model and admin controller for your module. Add the admin controller as a resource to your routes, like:
 
 ```
-Route::resource('blog', 'BlogController');
+Route::resource('blog', 'YourController');
 ```
 
 Go to your controller and append the CrudController trait:
@@ -44,7 +44,7 @@ namespace App\Http\Controllers;
 
 use LaravelAdmin\Crud\CrudController;
 
-class Controller extends Controller
+class YourController extends Controller
 {
   use CrudController;
 }

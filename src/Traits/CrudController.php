@@ -18,6 +18,7 @@ trait CrudController
 	 */
 	public function index()
 	{
+
 		//	TODO: Extend this method for searching, filtering and sorting
 
 		//	Get all records of the model
@@ -286,11 +287,29 @@ trait CrudController
 	{
 		$data['singular_name'] = $this->singular_name;
 		$data['plural_name']   = $this->plural_name;
-		$data['route']         = $this->route;
+		$data['route']         = $this->getRouteName();
 
 		//	TODO: What else
 
 		return $data;
+	}
+
+	protected function getRouteName()
+	{
+		//	If custom route defined in controller, use this
+		if (property_exists($this, 'route') && !empty($this->route)) return trim($this->route,'.').'.';
+
+		//	Get the current route
+		$current_route = \Route::currentRouteName();
+
+		//	Make an array based on the dots in the route
+		$route_parts = explode(".", $current_route);
+
+		//	Remove the last item of the array (the action)
+		array_pop($route_parts);
+
+		//	Return as string
+		return implode(".", $route_parts).'.';
 	}
 
 	/**
@@ -301,7 +320,7 @@ trait CrudController
 	 */
 	protected function route($action, $params = null)
 	{
-		return $params ? route($this->route.$action, $params) : route($this->route.$action);
+		return $params ? route($this->getRouteName().$action, $params) : route($this->getRouteName().$action);
 	}
 
 

@@ -20,8 +20,8 @@ class RenderList
 
 	/**
 	 * Generate the labels for the head of the table
-	 * @return Collection
-	 */
+	 * @return \Illuminate\Support\Collection
+     */
 	public function headings()
 	{
 		//	Map all fields and return the label
@@ -34,8 +34,8 @@ class RenderList
 	/**
 	 * Return all values of a model instance
 	 * @param  Model $model
-	 * @return Collection
-	 */
+	 * @return \Illuminate\Support\Collection
+     */
 	public function values($model)
 	{
 		//	Map over every item in fields and return the value of the specified field

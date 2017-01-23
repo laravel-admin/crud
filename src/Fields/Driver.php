@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\View;
  * Class with all shared methods for the drivers
  */
 
-//	TODO: Create a contract for fields, for making other people easyq to create their own field types
+//	TODO: Create a contract for fields, for making other people easy to create their own field types
 
 abstract class Driver
 {
@@ -31,14 +31,11 @@ abstract class Driver
 	{
 		//	Convention of the view is that it wil be stored in the fields folder
 		//	of the CRUD views. The name of the view has to be the snake cased
-		//	version of the classname
-		$view_path = "crud::fields.".snake_case(class_basename(get_class($this)));
+		//	version of the class name
+        $view_path = (property_exists($this, 'view_path') ? $this->view_path : "crud::fields." . snake_case(class_basename(get_class($this))));
 
 		//	Does the view exists
 		if (!View::exists($view_path)) return null;
-
-		//	TODO: The view_path has to be assigned in the field class
-		//	So other people can write their own fields outside this package
 
 		return $view_path;
 	}

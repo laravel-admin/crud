@@ -23,7 +23,7 @@ trait CrudController
 		//	Get all records of the model
 		$records = $this->model('all');
 
-		//	Retreive the fields wich will be used in records table
+		//	Retrieve the fields which will be used in records table
 		$fields = new RenderList($this->getFieldsForList());
 
 		//	Load the view
@@ -36,7 +36,14 @@ trait CrudController
 	 */
 	public function create()
 	{
-		return view('crud::templates.create');
+	    // Create new instance of the model
+	    $model = $this->model();
+
+        //	Get all the fields wich will be shown in the edit form
+        $fields = new RenderDetail($this->getFieldsForCreate());
+
+        // Render the view
+        return view('crud::templates.create',  $this->parseViewData(compact('model','fields')));
 	}
 
 	/**
@@ -127,11 +134,13 @@ trait CrudController
 		//	Get all arguments given to this method
 		$args 	= 	func_get_args();
 
-		//	The first argument is the method name, who will be called staticly
+		//	The first argument is the method name, who will be called statically
 		$method = 	array_shift($args);
 
+		if (!$method) return new $this->model;
+
 		//	Execute the class method with the given arguments
-		return call_user_func_array($this->model.'::'.$method, $args);
+		return call_user_func_array($this->model . '::' . $method, $args);
 	}
 
 	/**
@@ -194,7 +203,7 @@ trait CrudController
 		return collect($this->getFieldsForCreate())->map(function($item)
 		{
 			return $item['id'];
-		})->keys()->all();
+		})->all();
 	}
 
 	/**
@@ -206,7 +215,7 @@ trait CrudController
 		return collect($this->getFieldsForEdit())->map(function($item)
 		{
 			return $item['id'];
-		})->keys()->all();
+		})->all();
 	}
 
 
@@ -258,10 +267,10 @@ trait CrudController
 	{
 		//	Defaults: Title and Created date
 		return [
-			'title'	=>	['label'=>'Title', 'formatter'=>'title'],
+			'title'	=> ['label' => 'Title', 'formatter'=>'title'],
 
 			//	Added a closure to format the default value
-			'created' =>	['label'=>'Created', 'formatter'=>function($model)
+			'created' => ['label' => 'Created', 'formatter' => function($model)
 			{
 				return $model->created_at->format('Y-m-d');
 			}],
@@ -270,14 +279,14 @@ trait CrudController
 
 	/**
 	 * The data to transfer default to all views
-	 * @param  [type] $data [description]
-	 * @return [type]       [description]
+	 * @param  $data
+	 * @return array
 	 */
-	protected function parseViewData(array $data=[])
+	protected function parseViewData(array $data = [])
 	{
 		$data['singular_name'] = $this->singular_name;
-		$data['plural_name'] = $this->plural_name;
-		$data['route'] = $this->route;
+		$data['plural_name']   = $this->plural_name;
+		$data['route']         = $this->route;
 
 		//	TODO: What else
 

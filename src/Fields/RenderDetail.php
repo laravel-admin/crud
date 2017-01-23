@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\View;
 class RenderDetail
 {
 	protected $fields;
+	protected $namespace = '\\LaravelAdmin\\Crud\\Fields\\Drivers\\';
 
 	/**
 	 * Send an array with the config of all fields to show
@@ -22,9 +23,8 @@ class RenderDetail
 
 	/**
 	 * Return all values of a model instance
-	 * @param  Model $model
-	 * @return Collection
-	 */
+	 * @return \Illuminate\Support\Collection
+     */
 	public function values()
 	{
 		//	Map over every field and return an instance of the field driver for each item
@@ -33,8 +33,13 @@ class RenderDetail
 			//	TODO: Does the driver attribute exists?
 			$class = $item['driver'];
 
-			//	TODO: Does the class exists?
-			return new $class($item);
+			// Check if we got a string or class
+			if (!class_exists($class)) $class = $this->namespace . camel_case($class);
+
+            // Check if class exists
+            if(class_exists($class)) return new $class($item);
+
+            return null;
 		});
 	}
 }

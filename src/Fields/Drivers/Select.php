@@ -23,7 +23,7 @@ class Select extends Driver
 			return $this->config['options']($model);
 		}
 
-		//	TODO: Create more oppurtunies then only a callback
+		//	TODO: Create more opportunities then only a callback
 
 		return [];
 	}

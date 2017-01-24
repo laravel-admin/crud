@@ -288,6 +288,7 @@ trait CrudController
 		$data['singular_name'] = $this->singular_name;
 		$data['plural_name']   = $this->plural_name;
 		$data['route']         = $this->getRouteName();
+		$data['layout']         = $this->layout();
 
 		//	TODO: What else
 
@@ -334,6 +335,17 @@ trait CrudController
 	protected function redirect($action, $params = null)
 	{
 		return redirect($this->route($action, $params));
+	}
+
+
+	protected function layout()
+	{
+		//	If custom layout defined in controller, use this
+		if (property_exists($this, 'layout') && !empty($this->layout)) return $this->layout;
+
+		if (class_exists('\LaravelAdmin\Base\BaseServiceProvider')) return 'admin::master';
+
+		return 'layouts.admin';
 	}
 
 }

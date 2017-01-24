@@ -386,7 +386,7 @@ trait CrudController
 
 	protected function flash($message, $type="success")
 	{
-		if (!method_exists('flash')) return;
+		if (!function_exists('flash')) return;
 
 		flash($message, $type);
 	}

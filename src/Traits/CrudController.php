@@ -58,8 +58,10 @@ trait CrudController
 		//	Validate the request by getting the specified validation rules and messages
 		$this->validate($request, $this->getValidationRulesOnStore(), $this->getValidationMessagesOnStore());
 
+		$payload = $this->getPayloadOnStore($request->all());
+
 		//	Create a new instance of the model
-		$model = $this->model('create', $request->only($this->getPayloadOnStore()));
+		$model = $this->model('create', $payload);
 
 		//	Redirect to the edit form
 		return $this->redirect('edit', $model->id);
@@ -96,8 +98,10 @@ trait CrudController
 		//	Get the instance of the model
 		$model = $this->getModelInstance($id);
 
+		$payload = $this->getPayloadOnUpdate($request->all());
+
 		//	Update the model in the database
-		$model->update($request->only($this->getPayloadOnUpdate()));
+		$model->update($payload);
 
 		//	Return to the edit form
 		return back();
@@ -199,25 +203,44 @@ trait CrudController
 	 * Get all valid keys of post data what will be saved in the database
 	 * @return array
 	 */
-	protected function getPayloadOnStore()
+	protected function getPayloadOnStore(array $payload)
 	{
-		return collect($this->getFieldsForCreate())->map(function($item)
+		return $this->getPayloadOnStoreDefaults($payload);
+	}
+
+	protected function getPayloadOnStoreDefaults(array $payload)
+	{
+		$return = [];
+
+		foreach ($this->getFieldsForCreate() as $item)
 		{
-			return $item['id'];
-		})->all();
+			if (isset($payload[$item['id']])) $return[$item['id']] = $payload[$item['id']];
+		}
+
+		return $return;
 	}
 
 	/**
 	 * Get all valid keys of post data what will be updated in the database
 	 * @return array
 	 */
-	protected function getPayloadOnUpdate()
-	{
-		return collect($this->getFieldsForEdit())->map(function($item)
-		{
-			return $item['id'];
-		})->all();
-	}
+
+	protected function getPayloadOnUpdate(array $payload)
+ 	{
+ 		return $this->getPayloadOnUpdateDefaults($payload);
+ 	}
+
+ 	protected function getPayloadOnUpdateDefaults(array $payload)
+ 	{
+ 		$return = [];
+
+ 		foreach ($this->getFieldsForEdit() as $item)
+ 		{
+ 			if (isset($payload[$item['id']])) $return[$item['id']] = $payload[$item['id']];
+ 		}
+
+		return $return;
+ 	}
 
 
 	/**

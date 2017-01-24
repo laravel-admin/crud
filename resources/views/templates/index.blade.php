@@ -21,7 +21,7 @@
 				</thead>
 				<tbody>
 				@foreach ($records as $record)
-					<tr data-url="{{ route("{$route}edit", $record->id) }}">
+					<tr data-href="{{ route("{$route}edit", $record->id) }}">
 						@foreach ($fields->values($record) as $item) <td>	{{ $item }} </td> @endforeach
 					</tr>
 				@endforeach

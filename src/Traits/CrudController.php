@@ -63,6 +63,8 @@ trait CrudController
 		//	Create a new instance of the model
 		$model = $this->model('create', $payload);
 
+		$this->flash('The record has been created');
+
 		//	Redirect to the edit form
 		return $this->redirect('edit', $model->id);
 	}
@@ -103,6 +105,8 @@ trait CrudController
 		//	Update the model in the database
 		$model->update($payload);
 
+		$this->flash('The changes has been saved');
+
 		//	Return to the edit form
 		return back();
 	}
@@ -119,6 +123,8 @@ trait CrudController
 
 		// 	Delete the instance
 		$model->delete();
+
+		$this->flash('The record has been removed');
 
 		//	Return to the index page
 		return $this->redirect("index");
@@ -358,6 +364,10 @@ trait CrudController
 		return redirect($this->route($action, $params));
 	}
 
+	/**
+	 * Determine the master layout file
+	 * @return string
+	 */
 
 	protected function layout()
 	{
@@ -367,6 +377,18 @@ trait CrudController
 		if (class_exists('\LaravelAdmin\Base\BaseServiceProvider')) return 'admin::master';
 
 		return 'layouts.admin';
+	}
+
+	/**
+	 * Send flash message if installed
+	 * @return [type] [description]
+	 */
+
+	protected function flash($message, $type="success")
+	{
+		if (!method_exists('flash')) return;
+
+		flash($message, $type);
 	}
 
 }

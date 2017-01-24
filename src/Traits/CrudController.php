@@ -184,9 +184,7 @@ trait CrudController
 	 */
 	protected function getValidationRulesOnStore()
 	{
-		return [
-			'title' => 'required|string',
-		];
+		return $this->getValidationRulesOnUpdate();
 	}
 
 	/**
@@ -196,7 +194,7 @@ trait CrudController
 	 */
 	protected function getValidationMessagesOnStore()
 	{
-		return [];
+		return $this->getValidationRulesOnUpdate();
 	}
 
 	/**
@@ -205,7 +203,7 @@ trait CrudController
 	 */
 	protected function getPayloadOnStore(array $payload)
 	{
-		return $this->getPayloadOnStoreDefaults($payload);
+		return $this->getPayloadOnUpdate($payload);
 	}
 
 	protected function getPayloadOnStoreDefaults(array $payload)
@@ -269,7 +267,7 @@ trait CrudController
 	 */
 	protected function getFieldsForCreate()
 	{
-		return [];
+		return $this->getFieldsForEdit();
 	}
 
 

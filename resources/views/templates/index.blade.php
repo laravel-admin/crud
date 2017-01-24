@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="panel panel-default">
-			<table class="table">
+			<table class="table table-hover">
 				<thead>
 					<tr>
 						@foreach ($fields->headings() as $heading) <th>	{{ $heading }} </th> @endforeach
@@ -28,7 +28,7 @@
 				</tbody>
 			</table>
 			<div class="panel-footer">
-
+				{{ $records->render() }}
 			</div>
 		</div>
 

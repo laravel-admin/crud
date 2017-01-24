@@ -22,7 +22,7 @@ trait CrudController
 		//	TODO: Extend this method for searching, filtering and sorting
 
 		//	Get all records of the model
-		$records = $this->model('all');
+		$records = $this->model('paginate', 100);
 
 		//	Retrieve the fields which will be used in records table
 		$fields = new RenderList($this->getFieldsForList());

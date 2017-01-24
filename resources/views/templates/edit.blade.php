@@ -9,10 +9,10 @@
 
         <div class="page-header">
 
-            <div class="float-md-right">
+            <div class="pull-right">
                 <a href="{!! route("{$route}index") !!}" class="btn btn-default">Back</a>
                 <button type="submit" class="btn btn-danger" form="destroy_entry">Delete</button>
-                <button type="submit" class="btn btn-success">Save</button>
+                <button type="submit" class="btn btn-primary">Save</button>
 
             </div>
 

@@ -11,7 +11,7 @@
 
 			<div class="pull-right">
 				<a href="{!! route("{$route}index") !!}" class="btn btn-default">Back</a>
-				<button type="submit" class="btn btn-success">Save</button>
+				<button type="submit" class="btn btn-primary">Save</button>
 			</div>
 
 			<h1>Add {{ $singular_name  }}</h1>

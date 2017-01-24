@@ -3,13 +3,13 @@
 @section('content')
 
 <div class="container">
-	<div class="col-md-8">
+	<div class="col-md-10 col-md-push-1">
 
 		<div class="page-header">
-			<h1>{{ ucfirst($plural_name) }}</h1>
 			<div class="pull-right">
 				<a href="{{ route("{$route}create") }}" class="btn btn-primary">Create</a>
 			</div>
+			<h1>{{ ucfirst($plural_name) }}</h1>
 		</div>
 
 		<div class="panel panel-default">

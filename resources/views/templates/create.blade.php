@@ -1,37 +1,34 @@
-@extends('admin::master')
+@extends($layout)
 
 @section('content')
-<main>
-	<div class="container">
 
-		<form action="{!! route("{$route}store") !!}" method="post" class="form-horizontal">
-			{!! csrf_field() !!}
+<div class="container">
 
-			<div class="page-header">
+	<form action="{!! route("{$route}store") !!}" method="post" class="form-horizontal">
+		{!! csrf_field() !!}
 
-				<div class="float-md-right">
-					<a href="{!! route("{$route}index") !!}" class="btn btn-default">Terug</a>
-					<button type="submit" class="btn btn-success">Opslaan</button>
-				</div>
+		<div class="page-header">
 
-				<h1>{{ ucfirst($singular_name ) }} toevoegen</h1>
+			<div class="pull-right">
+				<a href="{!! route("{$route}index") !!}" class="btn btn-default">Back</a>
+				<button type="submit" class="btn btn-success">Save</button>
 			</div>
 
-			<div class="row">
-				<div class="col-xs-12 col-md-12">
-					<div class="card">
-						<div class="card-header">
-							<h4 class="card-title">Settings</h4>
-						</div>
-						<div class="card-block">
-							@foreach ($fields->values() as $field)
-								@if ($view = $field->view()) @include($view, compact($field, $model)) @endif
-							@endforeach
-						</div>
+			<h1>Add {{ $singular_name  }}</h1>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Settings</div>
+					<div class="panel-body">
+						@foreach ($fields->values() as $field)
+							@if ($view = $field->view()) @include($view, compact($field, $model)) @endif
+						@endforeach
 					</div>
 				</div>
 			</div>
-		</form>
-	</div>
-</main>
+		</div>
+	</form>
+</div>
 @stop

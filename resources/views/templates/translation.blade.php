@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route("{$route}update", [$model->id, $translation]) }}" method="post" class="form-horizontal">
+    <form action="{{ route("{$route}update", [$model->page_id, $translation]) }}" method="post" class="form-horizontal">
         {!! csrf_field() !!}
         {!! method_field('put') !!}
 
@@ -16,7 +16,7 @@
 				    {{ $languages[$translation] }} <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
-				    <li><a href="{{ route("{$route}show", [$model->id, $key]) }}">{{ $value }}</a></li>
+				    <li><a href="{{ route("{$route}show", [$model->page_id, $key]) }}">{{ $value }}</a></li>
 					@endforeach</ul>
 				</div>
 				@endif

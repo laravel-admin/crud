@@ -13,7 +13,7 @@
 				@if ($languages = config('translatable.labels'))
 				<div class="btn-group">
 				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				    {{ $languages[$languages] }} <span class="caret"></span>
+				    {{ $languages[$translation] }} <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
 				    <li><a href="{{ route("{$route}show", [$model->id, $key]) }}">{{ $value }}</a></li>

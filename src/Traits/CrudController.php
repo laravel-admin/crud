@@ -315,11 +315,45 @@ trait CrudController
 		$data['singular_name'] = $this->singular_name;
 		$data['plural_name']   = $this->plural_name;
 		$data['route']         = $this->getRouteName();
-		$data['layout']         = $this->layout();
+		$data['layout']        = $this->layout();
+		$data['submenu'] 	   = $this->getSubmenu();
 
 		//	TODO: What else
 
 		return $data;
+	}
+
+
+	protected function getSubmenu()
+	{
+		$current_route = \Route::currentRouteName();
+
+		//	Make an array based on the dots in the route
+		$route_parts = explode(".", $current_route);
+
+		//	Remove the last item of the array (the action)
+		$action = array_pop($route_parts);
+
+		if ($action == "index") return $this->getSubmenuForList();
+		if ($action == "create") return $this->getSubmenuForCreate();
+
+		return $this->getSubmenuForEdit();
+	}
+
+
+	protected function getSubmenuForList()
+	{
+		return [];
+	}
+
+	protected function getSubmenuForCreate()
+	{
+		return [];
+	}
+
+	protected function getSubmenuForEdit()
+	{
+
 	}
 
 	protected function getRouteName()

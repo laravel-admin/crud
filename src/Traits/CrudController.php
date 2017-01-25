@@ -178,9 +178,10 @@ trait CrudController
 	 * @param  int $id
 	 * @return Collection
 	 */
+
 	protected function getModelInstance($id)
 	{
-		return $this->model('findOrFail', $id);
+		return $this->instance = $this->model('findOrFail', $id);
 	}
 
 	/**

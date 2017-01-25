@@ -334,27 +334,13 @@ trait CrudController
 		//	Remove the last item of the array (the action)
 		$action = array_pop($route_parts);
 
-		if ($action == "index") return $this->getSubmenuForList();
-		if ($action == "create") return $this->getSubmenuForCreate();
+		if ($action == "index" && method_exists($this, 'getSubmenuForList')) return $this->getSubmenuForList();
+		if ($action == "create" && method_exists($this, 'getSubmenuForCreate')) return $this->getSubmenuForCreate();
+		if ( ($action == "edit" || $action == 'show') && method_exists($this, 'getSubmenuForEdit')) return $this->getSubmenuForCreate();
 
-		return $this->getSubmenuForEdit();
-	}
-
-
-	protected function getSubmenuForList()
-	{
 		return [];
 	}
 
-	protected function getSubmenuForCreate()
-	{
-		return [];
-	}
-
-	protected function getSubmenuForEdit()
-	{
-
-	}
 
 	protected function getRouteName()
 	{

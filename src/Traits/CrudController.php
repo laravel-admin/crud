@@ -336,7 +336,7 @@ trait CrudController
 
 		if ($action == "index" && method_exists($this, 'getSubmenuForList')) return $this->getSubmenuForList();
 		if ($action == "create" && method_exists($this, 'getSubmenuForCreate')) return $this->getSubmenuForCreate();
-		if ( ($action == "edit" || $action == 'show') && method_exists($this, 'getSubmenuForEdit')) return $this->getSubmenuForCreate();
+		if ( ($action == "edit" || $action == 'show') && method_exists($this, 'getSubmenuForEdit')) return $this->getSubmenuForEdit();
 
 		return [];
 	}

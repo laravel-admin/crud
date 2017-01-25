@@ -11,9 +11,8 @@
 
             <div class="pull-right">
                 <a href="{!! route("{$route}index") !!}" class="btn btn-default">Back</a>
-                <button type="submit" class="btn btn-danger" form="destroy_entry">Delete</button>
                 <button type="submit" class="btn btn-primary">Save</button>
-
+                <a href="{{ route("{$route}destroy", $model->id) }}" class="btn btn-danger" form="destroy_entry" data-method="delete" data-confirm="Are you sure to delete this item?">Delete</button>
             </div>
 
             <h1>Edit {{ ucfirst($singular_name) }}</h1>
@@ -27,7 +26,7 @@
 			@else
 				<div class="col-xs-12">
 			@endif
-			
+
                 <div class="panel panel-default">
                     <div class="panel-heading">Settings</div>
                     <div class="panel-body">
@@ -40,10 +39,6 @@
         </div>
     </form>
 
-    <form action="{{ route("{$route}destroy", $model->id) }}" method="post" id="destroy_entry">
-        {{ csrf_field() }}
-        {{ method_field('delete') }}
-    </form>
 </div>
 
 @stop

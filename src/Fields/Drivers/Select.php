@@ -18,7 +18,11 @@ class Select extends Driver
 	public function options($model)
 	{
 		//	If the options attribute is a callback
-		if (isset($this->config['options']) && is_callable($this->config['options']))
+		if (!isset($this->config['options'])) return [];
+
+		if (is_array($this->config['options'])) return $this->config['options'];
+
+		if (is_callable($this->config['options']))
 		{
 			return $this->config['options']($model);
 		}

@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route("{$route}update", $model->id) }}" method="post" class="form-horizontal">
+    <form action="{{ route("{$route}update", $model->id) }}" method="post" class="form-horizontal" enctype="multipart/form-data">
         {!! csrf_field() !!}
         {!! method_field('put') !!}
 
@@ -33,6 +33,8 @@
                         @foreach ($fields->values() as $field)
                             @if ($field && $view = $field->view()) @include($view, compact($field, $model)) @endif
                         @endforeach
+
+
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@
 
 <div class="container">
 
-	<form action="{!! route("{$route}store") !!}" method="post" class="form-horizontal">
+	<form action="{!! route("{$route}store") !!}" method="post" class="form-horizontal" enctype="multipart/form-data">
 		{!! csrf_field() !!}
 
 		<div class="page-header">

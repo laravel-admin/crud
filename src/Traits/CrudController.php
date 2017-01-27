@@ -92,7 +92,7 @@ trait CrudController
 	 * @param  int  $id
 	 * @return Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id)
+	public function update(Request $request, $id, $redirect=true)
 	{
 		//	Validate the request with the specified validation rules and messages
 		$this->validate($request, $this->getValidationRulesOnUpdate(), $this->getValidationMessagesOnUpdate());
@@ -102,13 +102,18 @@ trait CrudController
 
 		$payload = $this->getPayloadOnUpdate($request->all());
 
+
 		//	Update the model in the database
 		$model->update($payload);
 
-		$this->flash('The changes has been saved');
+		if ($redirect)
+		{
+			$this->flash('The changes has been saved');
+			//	Return to the edit form
+			return back();
+		}
 
-		//	Return to the edit form
-		return back();
+		return $model;
 	}
 
 	/**
@@ -238,10 +243,9 @@ trait CrudController
  	protected function getPayloadOnUpdateDefaults(array $payload)
  	{
  		$return = [];
-
  		foreach ($this->getFieldsForEdit() as $item)
  		{
- 			if (isset($payload[$item['id']])) $return[$item['id']] = $payload[$item['id']];
+ 			if (array_key_exists($item['id'], $payload)) $return[$item['id']] = $payload[$item['id']];
  		}
 
 		return $return;

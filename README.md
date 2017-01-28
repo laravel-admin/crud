@@ -121,11 +121,34 @@ For editing your model, the same methods as store are available:
 * getFieldsForEdit
 * getPayloadOnUpdate
 
+> Note: If your settings for store and update are the same, you only have to define the methods for the update. 
 
+#### View your records
 
+For generating the index view, you can define your fields with the getFieldsForList method.
 
+```
+protected function getFieldsForList()
+{
+   return [
+     [
+       'id' => 'title',
+       'label' => 'Title',
+     ],
+     [
+       'id' => 'created_at',
+       'label' => 'Created',
+       'formatter' => function($model)
+        {
+          return $model->created_at->format('Y-m-d');
+        }
+     ]
+  ];
+}
+```
 
-* getFieldsForList
+> Note: Each field has an optional formatter property. By default the property of the model defined in the id is shown. You can assign a accessor in the format field as string, or a callback as shown above.
+
 
 More to come....
 

@@ -32,31 +32,69 @@ LaravelAdmin\Crud\CrudServiceProvider::class,
 First create a migration, model and admin controller for your module. Add the admin controller as a resource to your routes, like:
 
 ```
-Route::resource('blog', 'YourController');
+Route::resource('blog', 'BlogController');
 ```
 
-Go to your controller and append the CrudController trait:
+### Resource controller
+
+Setup your basic controller for crud methods as follow:
 
 ```
 <?php
 
 namespace App\Http\Controllers;
 
-use LaravelAdmin\Crud\CrudController;
+use LaravelAdmin\Crud\Controllers\ResourceController;
 
-class YourController extends Controller
+use App\Blog;
+
+class BlogController extends ResourceController
 {
-  use CrudController;
+  protected $model = Blog::class;
+  
+  protected $singular_name = "blog";
+  protected $plural_name = "blogs";
+  
 }
 ```
 
-The trait includes all the crud methods for a Laravel resource controller, like index, create, store, edit, update and destroy. At this point only the show method will not be used.
+The ResourceController includes all the crud methods for a Laravel resource controller, like index, create, store, edit, update and destroy. At this point only the show method will not be used.
 
 The view who will be rendered by index,create and edit are default bootstrap and compatible with the views which will be scaffoled by artisan make:auth.
 
-The only thing you have to do is defining your fields and validation. Herefore you can override a couple of methods of the trait
+The only thing you have to do is defining your fields and validation. Herefore you can override a couple of methods of the parent controller in your own controller.
 
-* getValidationRulesOnStore
+#### Validation on store
+
+```
+protected function getValidationRulesOnStore()
+{
+        return [
+                'title' => 'required|string',
+        ];
+ }
+ ```
+
+#### Defining your fields for the create form
+
+```
+protected function getFieldsForCreate()
+{
+   return [
+     [
+       'id' => 'title',
+       'label' => 'Title',
+       'field' => 'text',
+     ],
+     [
+       'id' => 'body',
+       'label' => 'Body',
+       'field' => 'textarea',
+     ]
+  ];
+}
+```
+ 
 * getValidationRulesOnUpdate
 * getFieldsForCreate
 * getFieldsForEdit

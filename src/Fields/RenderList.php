@@ -57,7 +57,7 @@ class RenderList
 		if (!array_key_exists('formatter', $field))
 		{
 			$prop = $field['id'];
-			return $model->$id;
+			return $model->$prop;
 		}
 
 		//	Is the formatter a string

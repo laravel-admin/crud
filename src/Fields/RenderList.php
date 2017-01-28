@@ -54,7 +54,11 @@ class RenderList
 	public function render($model, $field)
 	{
 		//	Is the formatter defined for the field
-		if (!isset($field['formatter'])) return null;
+		if (!array_key_exists('formatter', $field))
+		{
+			$prop = $field['id'];
+			return $model->$id;
+		}
 
 		//	Is the formatter a string
 		if (is_string($field['formatter']))
@@ -68,5 +72,7 @@ class RenderList
 		{
 			return $field['formatter']($model);
 		}
+
+		return null;
 	}
 }

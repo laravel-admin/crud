@@ -70,7 +70,8 @@ The only thing you have to do is defining your fields and validation. Herefore y
 protected function getValidationRulesOnStore()
 {
         return [
-                'title' => 'required|string',
+                'title' => 'required|string|min:6',
+                'body'  => 'required|string',
         ];
  }
  ```
@@ -94,10 +95,36 @@ protected function getFieldsForCreate()
   ];
 }
 ```
- 
+
+#### Manipulate your payload for store
+
+This method is optional, by default the payload will be the fields which are defined in the getFieldsForCreate method. If you want to manipulate your data, like a password or date format you can implement this method
+
+```
+protected function getPayloadOnStore(array $data)
+{
+  $payload = $this->getPayloadForStoreDefault($data);
+  
+  //    If password is given, lets encrypt it, otherwise remove the password from the payload
+  if (!empty($payload['password'])) $payload['password'] = bcrypt($payload['password']);
+  else unset($payload['password']);
+  
+  return $payload
+}
+```
+
+#### Edit model
+
+For editing your model, the same methods as store are available:
+
 * getValidationRulesOnUpdate
-* getFieldsForCreate
 * getFieldsForEdit
+* getPayloadOnUpdate
+
+
+
+
+
 * getFieldsForList
 
 More to come....

@@ -5,12 +5,12 @@ namespace LaravelAdmin\Crud\Fields;
 use Illuminate\Support\Facades\View;
 
 /**
- * Class with all shared methods for the drivers
+ * Class with all shared methods for the fields
  */
 
 //	TODO: Create a contract for fields, for making other people easy to create their own field types
 
-abstract class Driver
+abstract class Field
 {
 	protected $config;
 

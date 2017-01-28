@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\View;
 class RenderDetail
 {
 	protected $fields;
-	protected $namespace = '\\LaravelAdmin\\Crud\\Fields\\Drivers\\';
+	protected $namespace = '\\LaravelAdmin\\Crud\\Fields\\';
 
 	/**
 	 * Send an array with the config of all fields to show
@@ -31,7 +31,7 @@ class RenderDetail
 		return $this->fields->map(function($item)
 		{
 			//	TODO: Does the driver attribute exists?
-			$class = $item['driver'];
+			$class = $item['field'];
 
 			// Check if we got a string or class
 			if (!class_exists($class)) $class = $this->namespace . camel_case($class);

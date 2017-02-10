@@ -17,26 +17,26 @@
 		<div class="col-xs-12">
 	@endif
 
-
-	<div class="panel panel-default">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					@foreach ($fields->headings() as $heading) <th>	{{ $heading }} </th> @endforeach
-				</tr>
-			</thead>
-			<tbody>
-			@foreach ($records as $record)
-				<tr data-href="{{ route("{$route}edit", $record->id) }}">
-					@foreach ($fields->values($record) as $item) <td>	{{ $item }} </td> @endforeach
-				</tr>
-			@endforeach
-			</tbody>
-		</table>
-		<div class="panel-footer">
-			{{ $records->render() }}
+			<div class="panel panel-default">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							@foreach ($fields->headings() as $heading) <th>	{{ $heading }} </th> @endforeach
+						</tr>
+					</thead>
+					<tbody>
+					@foreach ($records as $record)
+						<tr data-href="{{ route("{$route}edit", $record->id) }}">
+							@foreach ($fields->values($record) as $item) <td>	{{ $item }} </td> @endforeach
+						</tr>
+					@endforeach
+					</tbody>
+				</table>
+				<div class="panel-footer">
+					{{ $records->render() }}
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
 
 @stop

@@ -202,16 +202,25 @@ trait Crud
 		return $data;
 	}
 
-
+	/**
+	 * Get submenu
+	 *
+	 * @return
+	 */
 	protected function getSubmenu()
 	{
-		$current_route = \Route::currentRouteName();
+		// Check if we have different submenu
+		if(property_exists($this, 'submenu')) {
+			$action = $this->submenu;
+		} else {
+			$current_route = \Route::currentRouteName();
 
-		//	Make an array based on the dots in the route
-		$route_parts = explode(".", $current_route);
+			//	Make an array based on the dots in the route
+			$route_parts = explode(".", $current_route);
 
-		//	Remove the last item of the array (the action)
-		$action = array_pop($route_parts);
+			//	Remove the last item of the array (the action)
+			$action = array_pop($route_parts);
+		}
 
 		if ($action == "index" && method_exists($this, 'getSubmenuForList')) return $this->getSubmenuForList();
 		if ($action == "create" && method_exists($this, 'getSubmenuForCreate')) return $this->getSubmenuForCreate();

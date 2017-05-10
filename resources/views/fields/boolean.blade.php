@@ -1,7 +1,6 @@
 <div class="form-group">
-	<label for="{{ $field->id() }}" class="col-sm-3 control-label">{{ $field->label() }}</label>
-	<div class="col-sm-9">
+	<div class="col-sm-9 col-sm-push-3 checkbox">
 		<input type="hidden" name="{{ $field->id() }}" value="0" />
-		<input type="checkbox" name="{{ $field->id() }}" value="1" {{ $field->value($model) ? 'checked="checked"' : '' }}/>
-	</div>
+		<label><input type="checkbox" name="{{ $field->id() }}" value="1" {{ $field->value($model) ? 'checked="checked"' : '' }}/> {{ $field->label() }}</label>
+    </div>
 </div>

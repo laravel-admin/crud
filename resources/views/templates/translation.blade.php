@@ -3,11 +3,14 @@
 @section('content')
 
 <div class="container">
-    <form action="{{ route("{$route}update", [$model->page_id, $translation]) }}" method="post" class="form-horizontal">
+    <form action="{{ route("{$route}update", [$model->$foreign_key, $translation]) }}" method="post" class="form-horizontal">
         {!! csrf_field() !!}
         {!! method_field('put') !!}
 
         <div class="page-header">
+
+			{{-- var_dump($foreign_key) --}}
+			{{-- var_dump($model->$foreign_key) --}}
 
             <div class="pull-right">
 				@if ($languages = config('translatable.labels'))
@@ -16,7 +19,7 @@
 				    {{ $languages[$translation] }} <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
-				    <li><a href="{{ route("{$route}show", [$model->page_id, $key]) }}">{{ $value }}</a></li>
+				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $key]) }}">{{ $value }}</a></li>
 					@endforeach</ul>
 				</div>
 				@endif
@@ -24,7 +27,7 @@
 
             </div>
 
-            <h1>Edit {{ ucfirst($singular_name) }}</h1>
+            <h1>Edit {{ $singular_name }}</h1>
         </div>
 
         <div class="row">
@@ -35,7 +38,7 @@
 				<div class="col-xs-12">
 			@endif
                 <div class="panel panel-default">
-                    <div class="panel-heading">Settings</div>
+                    <div class="panel-heading"><h3 class="panel-title">{{ $languages[$translation] }} translation</h3></div>
                     <div class="panel-body">
                         @foreach ($fields->values() as $field)
                             @if ($field && $view = $field->view()) @include($view, compact($field, $model)) @endif
@@ -49,3 +52,5 @@
 </div>
 
 @stop
+
+@push('scripts') @include('crud::templates.tinymce') @endpush

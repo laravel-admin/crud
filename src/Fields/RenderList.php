@@ -2,6 +2,8 @@
 
 namespace LaravelAdmin\Crud\Fields;
 
+use Request;
+
 /**
  * Class to Render all fields for a list view in a CRUD model
  */
@@ -27,7 +29,8 @@ class RenderList
 		//	Map all fields and return the label
 		return $this->fields->map(function($item)
 		{
-			return $item['label'] ?? '-';
+			//return $item['label'] ?? '-';
+			return $item;
 		});
 	}
 
@@ -43,6 +46,27 @@ class RenderList
 		{
 			return $this->render($model, $item);
 		});
+	}
+
+	/**
+	 * Generate the labels for the head of the table
+	 * @param string $model
+	 * @return string
+   */
+	public function getOrderLink($order_by)
+	{
+	  $params = Request::all();
+
+	  if (isset($params['orderby']) && $params['orderby'] = $order_by)
+	  {
+	      $params['order'] = isset($params['order']) && $params['order'] == 'asc' ? 'desc' : 'asc';
+	  }
+	  else {
+	      $params['orderby'] = $order_by;
+				$params['order'] = 'asc';
+	  }
+
+	  return '?'.http_build_query($params);
 	}
 
 	/**

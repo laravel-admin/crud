@@ -7,5 +7,5 @@ namespace LaravelAdmin\Crud\Fields;
  */
 class Boolean extends Field
 {
-	//	Inherits all methods from the parent field class
+    //	Inherits all methods from the parent field class
 }

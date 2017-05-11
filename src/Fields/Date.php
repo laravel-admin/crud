@@ -7,5 +7,5 @@ namespace LaravelAdmin\Crud\Fields;
  */
 class Date extends Field
 {
-	//	Inherits all methods from the parent driver class
+    //	Inherits all methods from the parent driver class
 }

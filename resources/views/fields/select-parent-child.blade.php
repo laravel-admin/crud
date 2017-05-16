@@ -6,8 +6,8 @@
                 <option value="{{ $option->id }}" {{ $field->current_id($model) == $option->id ? 'disabled="disabled"' : '' }} {{ $field->value($model) == $option->id ? 'selected="selected"' : '' }}>
                     {{ $option->name }}
                 </option>
-                @if(count($option->option_childs($field->current_id($model))))
-                    @include('crud::fields.select-parent-child-childs',['current_id' => $field->current_id($model), 'prefix' => ' - ', 'childs' => $option->option_childs($field->current_id($model))])
+                @if(count($option->childs))
+                    @include('crud::fields.select-parent-child-childs',['prefix' => ' - ', 'childs' => $option->childs])
                 @endif
             @endforeach
         </select>

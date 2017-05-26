@@ -109,6 +109,10 @@ class Layout
      */
     public function components()
     {
+        if (!empty($this->components)) {
+            return $this->components;
+        }
+        
         //	Create per component a path to the view
         return $this->components = $this->data->map(function ($item) {
             if (!empty($item['settings']['type']) && $config = $this->getConfigForComponent($item['settings']['type'])) {

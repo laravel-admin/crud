@@ -15,6 +15,6 @@ class Field
 
     public function __toString()
     {
-        return $this->content;
+        return $this->content ?: '';
     }
 }

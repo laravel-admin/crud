@@ -43,12 +43,12 @@ class Component
         if (!$this->isActive()) {
             return null;
         }
-        
+
         if (!$this->viewExists()) {
             return null;
         }
 
-        return View::make($this->getView(), $this->getContent());
+        return View::make($this->getView(), $this->getContent()->toArray());
     }
 
     public function getContent()
@@ -57,37 +57,38 @@ class Component
             $this->component['content'] = [];
         }
 
-        $content = collect($this->component['content'])->map(function ($item, $key) {
-            if ($driver = $this->getFieldDriver($key, $item)) {
-                return $driver;
+        $content = collect($this->config['fields'])->mapWithKeys(function ($item) {
+            if (empty($this->component['content'][$item['id']])) {
+                $content = null;
+            } else {
+                $content = $this->component['content'][$item['id']];
             }
 
-            return $item;
+            return [$item['id']=>$this->getFieldDriver($item, $content)];
         });
 
         return $content;
     }
 
-    protected function getFieldDriver($field, $content)
+    protected function getFieldDriver(array $field, $content)
     {
         $namespace = "\\LaravelAdmin\\Crud\\Layout\\Fields\\";
-        $config = collect($this->config['fields'])->where('id', $field)->first();
 
         $driverOptions = [];
 
-        if (!empty($config['driver'])) {
-            $driverOptions[] = $config['driver'];
+        if (!empty($field['driver'])) {
+            $driverOptions[] = $field['driver'];
         }
 
-        if (!empty($config['type'])) {
-            $driverOptions[] = $namespace.studly_case($config['type']);
+        if (!empty($field['type'])) {
+            $driverOptions[] = $namespace.studly_case($field['type']);
         }
 
         $driverOptions[] = Field::class;
 
         foreach ($driverOptions as $driver) {
             if (class_exists($driver)) {
-                return new $driver($content, $config);
+                return new $driver($content, $field ?: []);
             }
         }
 

@@ -19,7 +19,7 @@ abstract class ResourceController extends Controller
     public function index(Request $request)
     {
         //	Get all records of the model and set default ordering
-        $builder = $this->model('orderBy', $request->orderby ?: $this->list_order_by, $request->order ?: ((isset($this->list_order)) ? $this->list_order : 'desc'));
+        $builder = $this->model('orderBy', $request->orderby ?: ((property_exists($this, 'list_order_by')) ? $this->list_order_by : 'name'), $request->order ?: ((property_exists($this, 'list_order')) ? $this->list_order : 'desc'));
 
         //	Retrieve the fields which will be used in records table
         $fields = new RenderList($this->getFieldsForList());

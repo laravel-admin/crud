@@ -46,12 +46,12 @@
 				<div class="col-xs-12">
 			@endif
 
-				<layout
-					:locale="{{ $translation ? 'true' : 'false' }}"
-					controller="{{ URL::current() }}"
-					:layoutdata="{{ json_encode($model->layout) }}"
-					:layoutsettings="{{ json_encode($settings) }}"
-				></layout>
+			<layout
+				:locale="{{ $translation ? 'true' : 'false' }}"
+				controller="{{ URL::current() }}"
+				:layoutdata="{{ json_encode($model->layout ?: [])  }}"
+				:layoutsettings="{{ json_encode($settings ?: []) }}"
+			></layout>
 
             </div>
         </div>

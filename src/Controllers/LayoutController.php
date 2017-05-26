@@ -17,7 +17,20 @@ class LayoutController extends Controller
      */
     public function index(Request $request, $id)
     {
-        return $this->show($request, $id, app()->getLocale());
+        //	Get the model instance
+        $model = $this->getModelInstance($id);
+
+        if ($request->ajax()) {
+            return $model;
+        }
+
+        $settings = (new \LaravelAdmin\Crud\Layout\Config())->all();
+
+        $translation = null;
+        $foreign_key = null;
+
+        //	Render the view
+        return view('crud::templates.layout', $this->parseViewData(compact('model', 'settings', 'translation', 'foreign_key')));
     }
 
     /**
@@ -62,6 +75,29 @@ class LayoutController extends Controller
         //	Render the view
         return view('crud::templates.layout', $this->parseViewData(compact('model', 'settings', 'translation', 'foreign_key')));
     }
+
+    /**
+     * Store the layout
+     * @param  Request $request [description]
+     * @param  int  $page_id [description]
+     * @return Response
+     */
+     public function store(Request $request, $id)
+     {
+         //	Validate the request with the specified validation rules and messages
+         $this->validate($request, ['layout'=>'array']);
+
+         //	Get the model instance
+         $model = $this->getModelInstance($id);
+
+         $model->layout = $request->layout;
+         $model->save();
+
+         $this->flash('The layout is succesfully saved', 'success');
+
+         return ['status'=>'success'];
+     }
+
 
     /**
      * Store the layout

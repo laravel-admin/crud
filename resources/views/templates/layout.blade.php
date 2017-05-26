@@ -9,6 +9,7 @@
 
         <div class="page-header">
 
+			@if ($translation)
             <div class="pull-right">
 				@if ($languages = config('translatable.labels'))
                 <div class="btn-group">
@@ -31,6 +32,8 @@
 				@endif
 
             </div>
+			@endif
+
             <h1>Layout of {{ ucfirst($singular_name) }}</h1>
         </div>
 
@@ -44,6 +47,7 @@
 			@endif
 
 				<layout
+					:locale="{{ $translation ? 'true' : 'false' }}"
 					controller="{{ URL::current() }}"
 					:layoutdata="{{ json_encode($model->layout) }}"
 					:layoutsettings="{{ json_encode($settings) }}"

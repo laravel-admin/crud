@@ -186,7 +186,12 @@
 
 			save()
 			{
-				axios.put(this.controller, {layout:this.checkedData});
+				if (this.locale) {
+					axios.put(this.controller, {layout:this.checkedData});
+				}
+				else {
+					axios.post(this.controller, {layout:this.checkedData});
+				}
 			}
 		}
     }

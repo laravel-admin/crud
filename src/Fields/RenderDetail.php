@@ -34,7 +34,8 @@ class RenderDetail
 
             // Check if we got a string or class
             if (!class_exists($class)) {
-                $class = $this->namespace . camel_case($class);
+                //$class = $this->namespace . camel_case($class);
+                $class = $this->namespace . studly_case($class);
             }
 
             // Check if class exists

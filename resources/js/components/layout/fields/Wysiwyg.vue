@@ -9,7 +9,7 @@
 
 <script>
     export default {
-		props: ['settings','data'],
+		props: ['settings','data','index'],
 
         data() {
             return {
@@ -45,9 +45,8 @@
         methods: {
 
             updateData(editor, content) {
-                this.$emit('update', this.settings.id, content);
+                this.$emit('update', this.settings.id, content, this.index);
             }
-
 
         }
     }

@@ -14,21 +14,31 @@
             return {item:null};
         },
 
-		props: ['settings','data'],
+		props: ['settings','data','index'],
 
         mounted() {
-            if (this.data) {
-                axios({url:'/media/ajax/'+this.data, method:'get'}).then(response => {
-                    this.item = response.data;
-                });
-            }
+            this.getMediaItem();
         },
+
+		watch : {
+		   data : function (value) {
+			 this.getMediaItem();
+		   }
+	   },
 
         methods: {
 
             updateMediaItem(obj) {
-                this.$emit('update', this.settings.id, obj ? obj.id : null);
-            }
+                this.$emit('update', this.settings.id, obj ? obj.id : null, this.index);
+            },
+
+			getMediaItem() {
+				if (this.data) {
+	                axios({url:'/media/ajax/'+this.data, method:'get'}).then(response => {
+	                    this.item = response.data;
+	                });
+	            }
+			}
 
         }
 

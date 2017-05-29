@@ -58,6 +58,7 @@
 	        'layout-select': require('./fields/Select.vue'),
 	        'layout-media-item': require('./fields/MediaItem.vue'),
 	        'layout-wysiwyg': require('./fields/Wysiwyg.vue'),
+	        'layout-repeater': require('./fields/Repeater.vue'),
 		},
 
 		//	Define the props, given from the layout component

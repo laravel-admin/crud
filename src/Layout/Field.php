@@ -4,7 +4,7 @@ namespace LaravelAdmin\Crud\Layout;
 
 class Field
 {
-    protected $content;
+    public $content;
     protected $config;
 
     public function __construct($content, array $config=[])

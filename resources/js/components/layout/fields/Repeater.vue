@@ -21,7 +21,7 @@
 			</div>
 
 			<!-- If no items avaliable just show an add item button -->
-			<button class="btn btn-primary" @click.prevent="addItem" v-if="!content">Add item</button>
+			<button class="btn btn-primary" @click.prevent="addItem" v-if="!content.length">Add item</button>
 		</div>
 	</div>
 </template>

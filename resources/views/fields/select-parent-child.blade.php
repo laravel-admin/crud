@@ -3,7 +3,7 @@
 	<div class="col-sm-9">
         <select name="{{ $field->id() }}" class="form-control {{ $field->css_classes() }}">
             @foreach ($field->options($model) as $option)
-                <option value="{{ $option->id }}" {{ $field->current_id($model) == $option->id ? 'disabled="disabled"' : '' }} {{ $field->value($model) == $option->id ? 'selected="selected"' : '' }}>
+                <option value="{{ $option->id }}" {{ ($field->current_id($model) == $option->id && !empty($option->id)) ? 'disabled="disabled"' : '' }} {{ $field->value($model) == $option->id ? 'selected="selected"' : '' }}>
                     {{ $option->name }}
                 </option>
                 @if(count($option->childs))

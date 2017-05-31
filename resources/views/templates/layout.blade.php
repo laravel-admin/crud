@@ -34,7 +34,8 @@
             </div>
 			@endif
 
-            <h1>Layout of {{ ucfirst($singular_name) }}</h1>
+            <h1>Edit {{ $singular_name }}</h1>
+            <p><strong>Admin name:</strong> {{ $parent_name }}</p>
         </div>
 
         <div class="row">

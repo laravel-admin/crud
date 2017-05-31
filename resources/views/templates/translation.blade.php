@@ -8,10 +8,6 @@
         {!! method_field('put') !!}
 
         <div class="page-header">
-
-			{{-- var_dump($foreign_key) --}}
-			{{-- var_dump($model->$foreign_key) --}}
-
             <div class="pull-right">
 				@if ($languages = config('translatable.labels'))
 				<div class="btn-group">
@@ -28,6 +24,7 @@
             </div>
 
             <h1>Edit {{ $singular_name }}</h1>
+            <p><strong>Admin name:</strong> {{ $parent_name }}</p>
         </div>
 
         <div class="row">

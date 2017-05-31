@@ -14,7 +14,9 @@ class TranslationController extends Controller
     public function show($id, $translation)
     {
         //	Get the model instance
-        $model = $this->getModelInstance($id)->translateOrNew($translation);
+        $parent = $this->getModelInstance($id);
+        $parent_name = $parent->name;
+        $model = $parent->translateOrNew($translation);
         $foreign_key = snake_case(class_basename($this->model))."_id";
 
         //var_dump(class_basename($this->model));
@@ -26,7 +28,7 @@ class TranslationController extends Controller
         $fields = new RenderDetail($this->getFieldsForEdit());
 
         //	Render the view
-        return view('crud::templates.translation', $this->parseViewData(compact('model', 'foreign_key', 'fields', 'translation')));
+        return view('crud::templates.translation', $this->parseViewData(compact('parent_name', 'model', 'foreign_key', 'fields', 'translation')));
     }
 
 

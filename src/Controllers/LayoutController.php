@@ -50,7 +50,9 @@ class LayoutController extends Controller
     public function show(Request $request, $id, $translation)
     {
         //	Get the model instance
-        $model = $this->getModelInstance($id)->translateOrNew($translation);
+        $parent = $this->getModelInstance($id);
+        $parent_name = $parent->name;
+        $model = $parent->translateOrNew($translation);
         $foreign_key = snake_case(class_basename($this->model))."_id";
 
         if ($request->has('copy')) {
@@ -73,7 +75,7 @@ class LayoutController extends Controller
         $settings = (new \LaravelAdmin\Crud\Layout\Config())->all();
 
         //	Render the view
-        return view('crud::templates.layout', $this->parseViewData(compact('model', 'settings', 'translation', 'foreign_key')));
+        return view('crud::templates.layout', $this->parseViewData(compact('parent_name', 'model', 'settings', 'translation', 'foreign_key')));
     }
 
     /**

@@ -3,7 +3,7 @@
 		<div class="panel-heading nav navbar-default">
             <div>
                 <div class="pull-left">
-                     <h3 class="panel-title"><a href="#" class="">{{ data.settings.name }}</a></h3>
+                     <h3 class="panel-title">{{ data.settings.name }}</h3>
                 </div>
 
                 <div>

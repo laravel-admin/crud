@@ -14,9 +14,9 @@
         data() {
             return {
                 options: {
-                    plugins: ['advlist', 'link', 'code'], //,'image','media'],
+                    plugins: ['lists', 'link', 'code'],
                     menubar: '',
-                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink image | code | media',
+                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | removeformat | code',
                 }
             }
         },

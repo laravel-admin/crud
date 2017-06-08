@@ -35,7 +35,7 @@
 			@endif
 
             <h1>Edit {{ $singular_name }}</h1>
-            <p><strong>Admin name:</strong> {{ $parent_name }}</p>
+            <p><strong>Admin {{ $select_parent_name }}:</strong> {{ $parent_name }}</p>
         </div>
 
         <div class="row">

@@ -14,6 +14,7 @@
         data() {
             return {
                 options: {
+                    height : "200",
                     plugins: ['lists', 'link', 'code'],
                     menubar: '',
                     toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | removeformat | code',

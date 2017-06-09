@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import Event from '../../../../../base/resources/js/Event';
 
     export default {
 
@@ -186,11 +187,17 @@
 
 			save()
 			{
+                const notify = () => {
+                    Event.$emit('notification', {type: 'success', message: 'Saved'});
+                };
+                const error = () => {
+                    Event.$emit('notification', {type: 'danger', message: 'Saving failed'});
+                };
 				if (this.locale) {
-					axios.put(this.controller, {layout:this.checkedData});
+					axios.put(this.controller, {layout:this.checkedData}).then(notify).catch(error);
 				}
 				else {
-					axios.post(this.controller, {layout:this.checkedData});
+					axios.post(this.controller, {layout:this.checkedData}).then(notify).catch(error);
 				}
 			}
 		}

@@ -76,6 +76,11 @@ abstract class ResourceController extends Controller
         // Get payload from settings
         $payload = $this->getPayloadOnStore($request->all());
 
+        // Add user_id to payload
+        if(\Schema::hasColumn($this->model()->getTable(), 'created_by')){
+            $payload['created_by'] = \Auth::user()->id;
+        }
+
         //	Create a new instance of the model
         $model = $this->model('create', $payload);
 
@@ -119,6 +124,11 @@ abstract class ResourceController extends Controller
 
         // Get payload from settings
         $payload = $this->getPayloadOnUpdate($request->all());
+
+        // Add user_id to payload
+        if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+            $payload['updated_by'] = \Auth::user()->id;
+        }
 
         //	Update the model in the database
         $model->update($payload);

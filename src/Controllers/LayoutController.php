@@ -94,6 +94,10 @@ class LayoutController extends Controller
          $model = $this->getModelInstance($id);
 
          $model->layout = $request->layout;
+         // Add user_id to payload
+         if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+             $model->updated_by = \Auth::user()->id;
+         }
          $model->save();
 
          $this->flash('The layout is succesfully saved', 'success');
@@ -116,7 +120,12 @@ class LayoutController extends Controller
          //	Get the model instance
          $model = $this->getModelInstance($id);
 
-         $model->translateOrNew($translation)->fill(['layout'=>$request->layout]);
+         $payload = ['layout'=>$request->layout];
+         // Add user_id to payload
+         if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+             $payload['updated_by'] = \Auth::user()->id;
+         }
+         $model->translateOrNew($translation)->fill($payload);
          $model->save();
 
          $this->flash('The layout is succesfully saved', 'success');

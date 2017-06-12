@@ -43,6 +43,11 @@ class TranslationController extends Controller
 
         $payload = $this->getPayloadOnUpdate($request->all());
 
+        // Add user_id to payload
+        if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+            $payload['updated_by'] = \Auth::user()->id;
+        }
+
         $model->translateOrNew($translation)->fill($payload);
         $model->save();
 

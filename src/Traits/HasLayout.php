@@ -6,7 +6,7 @@ use LaravelAdmin\Crud\Layout\Layout;
 
 trait HasLayout
 {
-    public function layout($field="layout")
+    public function getLayout($field="layout")
     {
         return new Layout($this, $field);
     }

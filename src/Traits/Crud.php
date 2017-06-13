@@ -251,6 +251,9 @@ trait Crud
 		$data['layout']         = $this->layout();
 		$data['submenu'] 	    = $this->getSubmenu();
 
+        $data['allow_create'] 	    = (property_exists($this, 'allow_create')) ? $this->allow_create : true;
+        $data['allow_delete'] 	    = (property_exists($this, 'allow_delete')) ? $this->allow_delete : true;
+
 		//	TODO: What else
 
 		return $data;

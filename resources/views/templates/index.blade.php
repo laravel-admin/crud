@@ -18,12 +18,16 @@
                             <li><a href="{!! route("{$route}store") !!}?action=set&amp;type={{ $item['id'] }}">{{ $item['label_action'] }}</a></li>
                         @endif
 					@endforeach
+                    @if($allow_delete)
 					<li role="separator" class="divider"></li>
 					<li><a href="{!! route("{$route}store") !!}?action=delete" class="text-danger">Delete</a></li>
+                    @endif
 				</ul>
 			</div>
 			@endif
+            @if($allow_create)
 			<a class="btn btn-primary" href="{!! URL::route("{$route}create") !!}">Add {!! $singular_name !!}</a>
+            @endif
 		</div>
 
 	    <h1>{!! $records->total() !!} {!! ucfirst($plural_name) !!} found
@@ -34,19 +38,13 @@
 
 	<div class="row">
 
-		@if($handle_bulk || !empty($submenu))
 		@include('crud::templates.index-submenu')
-		@endif
 
 		<form action="{!! route("{$route}store") !!}" method="post" id="main-form">
 
 			{!! csrf_field() !!}
 
-			@if($handle_bulk || !empty($submenu))
 			<div class="col-md-9">
-			@else
-			<div class="col-md-12">
-			@endif
 
 				<div class="panel panel-default">
 

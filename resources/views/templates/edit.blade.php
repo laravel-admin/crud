@@ -14,7 +14,9 @@
             <div class="pull-right">
                 <a href="{!! route("{$route}index") !!}" class="btn btn-default">Back</a>
                 <button type="submit" class="btn btn-primary">Save</button>
+                @if($allow_delete)
                 <a href="{{ route("{$route}destroy", $model->id) }}" class="btn btn-danger" form="destroy_entry" data-method="delete" data-confirm="Are you sure to delete this item?">Delete</a>
+                @endif
             </div>
 
             <h1>Edit {{ $singular_name }}</h1>

@@ -105,11 +105,15 @@ import Event from '../../../../../base/resources/js/Event';
 					}
 				};
 
+				this.data.push(obj);
+
+				// TODO: Append new component to the specified index 
+
 				//	If no index specified, append the component to the bottom
-				if (typeof index === 'undefined') this.data.push(obj);
+				//if (typeof index === 'undefined') this.data.push(obj);
 
 				//	Append the component at the specified position
-				else this.data.splice(index, 0, obj);
+				//else this.data.splice(index, 0, obj);
 			},
 
 			/**

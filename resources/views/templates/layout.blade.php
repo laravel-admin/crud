@@ -47,16 +47,23 @@
 				<div class="col-xs-12">
 			@endif
 
-            @if($model->slug)
-			<layout
-				:locale="{{ $translation ? 'true' : 'false' }}"
-				controller="{{ URL::current() }}"
-				:layoutdata="{{ json_encode($model->layout ?: []) }}"
-				:layoutsettings="{{ json_encode($settings ?: []) }}"
-			></layout>
-            @else
-            <p>Please use the language setup for the selected language first.</p>
-            @endif
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">{{ $languages[$translation] }} translation</h3></div>
+                <div class="panel-body">
+
+                    @if($model->slug)
+        			<layout
+        				:locale="{{ $translation ? 'true' : 'false' }}"
+        				controller="{{ URL::current() }}"
+        				:layoutdata="{{ json_encode($model->layout ?: []) }}"
+        				:layoutsettings="{{ json_encode($settings ?: []) }}"
+        			></layout>
+                    @else
+                    <p>Please use the language setup for the selected language first.</p>
+                    @endif
+                    
+                </div>
+            </div>
 
             </div>
         </div>

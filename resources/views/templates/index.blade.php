@@ -57,9 +57,9 @@
 						</thead>
 						<tbody>
 						@foreach ($records as $record)
-						<tr data-href="{{ route("{$route}edit", $record->id) }}">
+						<tr data-href="{{ route("{$route}edit", $record->id) }}" @if(!is_null($record->is_active) && !$record->is_active)class="danger"@endif>
 							@if($handle_bulk)<td><input type="checkbox" name="record[{!! $record->id !!}]" value="{!! $record->id !!}" class="check-item"></td>@endif
-							@foreach ($fields->values($record) as $item) <td>	{{ $item }} </td> @endforeach
+							@foreach ($fields->values($record) as $item) <td> {{ $item }} </td> @endforeach
 						</tr>
 						@endforeach
 						</tbody>

@@ -245,7 +245,7 @@ trait Crud
 		$data['list_search_on']	= (property_exists($this, 'list_search_on')) ? $this->list_search_on : null;
 
 		$data['singular_name']  = $this->singular_name;
-		$data['plural_name']    = (property_exists($this, 'list_search_on')) ? $this->plural_name : null;
+		$data['plural_name']    = (property_exists($this, 'plural_name')) ? $this->plural_name : null;
 		$data['route']          = $this->getRouteName();
 		$data['parent_route']   = $this->getRouteName(2);
 		$data['layout']         = $this->layout();

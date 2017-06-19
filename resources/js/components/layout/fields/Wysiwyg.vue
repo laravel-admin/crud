@@ -15,9 +15,9 @@
             return {
                 options: {
                     height : "200",
-                    plugins: ['lists', 'link', 'code'],
+                    plugins: ['lists', 'link', 'code', 'charmap'],
                     menubar: '',
-                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | removeformat | code',
+                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | charmap | link unlink | removeformat | code',
                 }
             }
         },

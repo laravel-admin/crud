@@ -2,7 +2,7 @@
 	<div class="form-group">
         <label :for="settings.id" class="col-sm-3 control-label">{{ settings.name }}</label>
         <div class="col-sm-9">
-            <tinymce :id="makeid" :options="options" @change="updateData" :content="parsedData"></tinymce>
+            <tinymce :id="makeid" :options="options" @change="updateData" :content="content"></tinymce>
         </div>
 	</div>
 </template>
@@ -13,6 +13,7 @@
 
         data() {
             return {
+                content: (!this.data || typeof this.data == 'object') ? '' : this.data,
                 options: {
                     height : "200",
                     plugins: ['lists', 'link', 'code', 'charmap'],
@@ -24,11 +25,11 @@
 
         computed: {
 
-            parsedData() {
+            /*parsedData() {
                 if (!this.data || typeof this.data == 'object') return '';
 
                 return this.data;
-            },
+            },*/
 
             makeid()
             {

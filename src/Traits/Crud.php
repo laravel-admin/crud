@@ -129,7 +129,7 @@ trait Crud
 
 				switch($item['field']){
 					case 'date':
-						$return[$item['id']] = (!is_null($payload[$item['id']])) ? Carbon::createFromFormat('m-d-Y', $payload[$item['id']])->format('Y-m-d') : null;
+						$return[$item['id']] = (!is_null($payload[$item['id']])) ? Carbon::createFromFormat('d-m-Y', $payload[$item['id']])->format('Y-m-d') : null;
 						break;
 
 					default:

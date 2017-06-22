@@ -20,7 +20,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">Settings</div>
+					<div class="panel-heading"><h3 class="panel-title">General settings</h3></div>
 					<div class="panel-body">
 						@foreach ($fields->values() as $field)
 							@if ($view = $field->view()) @include($view, compact($field, $model)) @endif

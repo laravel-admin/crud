@@ -107,7 +107,7 @@ import Event from '../../../../../base/resources/js/Event';
 
 				this.data.push(obj);
 
-				// TODO: Append new component to the specified index 
+				// TODO: Append new component to the specified index
 
 				//	If no index specified, append the component to the bottom
 				//if (typeof index === 'undefined') this.data.push(obj);
@@ -192,7 +192,7 @@ import Event from '../../../../../base/resources/js/Event';
 			save()
 			{
                 const notify = () => {
-                    Event.$emit('notification', {type: 'success', message: 'Saved'});
+                    Event.$emit('notification', {type: 'success', message: 'The layout is succesfully saved'});
                 };
                 const error = () => {
                     Event.$emit('notification', {type: 'danger', message: 'Saving failed'});

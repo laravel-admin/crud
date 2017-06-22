@@ -12,21 +12,21 @@
 			@if ($translation)
             <div class="pull-right">
 				@if ($languages = config('translatable.labels'))
-                <div class="btn-group">
+				<div class="btn-group">
 				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				    Copy from <span class="caret"></span>
+				    {{ strtoupper($translation) }} <span class="caret"></span>
 				  </button>
-				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value) @continue ($key == $translation)
-				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $translation]) }}?copy={{ $key }}">{{ $value }}</a></li>
+				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
+				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $key]) }}">{{ strtoupper($key) }}</a></li>
 					@endforeach</ul>
 				</div>
 
-				<div class="btn-group">
+                <div class="btn-group">
 				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				    {{ $languages[$translation] }} <span class="caret"></span>
+				    Copy widgets from <span class="caret"></span>
 				  </button>
-				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
-				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $key]) }}">{{ $value }}</a></li>
+				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value) @continue ($key == $translation)
+				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $translation]) }}?copy={{ $key }}">{{ $value }} widget setup</a></li>
 					@endforeach</ul>
 				</div>
 				@endif

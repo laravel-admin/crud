@@ -9,37 +9,41 @@ use Illuminate\Support\Facades\View;
  */
 class RenderDetail
 {
-	protected $fields;
-	protected $namespace = '\\LaravelAdmin\\Crud\\Fields\\';
+    protected $fields;
+    protected $namespace = '\\LaravelAdmin\\Crud\\Fields\\';
 
-	/**
-	 * Send an array with the config of all fields to show
-	 * @param array $fields
-	 */
-	public function __construct(array $fields)
-	{
-		$this->fields = collect($fields);
-	}
-
-	/**
-	 * Return all values of a model instance
-	 * @return \Illuminate\Support\Collection
+    /**
+     * Send an array with the config of all fields to show
+     * @param array $fields
      */
-	public function values()
-	{
-		//	Map over every field and return an instance of the field driver for each item
-		return $this->fields->map(function($item)
-		{
-			//	TODO: Does the driver attribute exists?
-			$class = $item['field'];
+    public function __construct(array $fields)
+    {
+        $this->fields = collect($fields);
+    }
 
-			// Check if we got a string or class
-			if (!class_exists($class)) $class = $this->namespace . camel_case($class);
+    /**
+     * Return all values of a model instance
+     * @return \Illuminate\Support\Collection
+     */
+    public function values()
+    {
+        //	Map over every field and return an instance of the field driver for each item
+        return $this->fields->map(function ($item) {
+            //	TODO: Does the driver attribute exists?
+            $class = $item['field'];
+
+            // Check if we got a string or class
+            if (!class_exists($class)) {
+                //$class = $this->namespace . camel_case($class);
+                $class = $this->namespace . studly_case($class);
+            }
 
             // Check if class exists
-            if(class_exists($class)) return new $class($item);
+            if (class_exists($class)) {
+                return new $class($item);
+            }
 
             return null;
-		});
-	}
+        });
+    }
 }

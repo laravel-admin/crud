@@ -9,37 +9,50 @@ use LaravelAdmin\Crud\Traits\Crud;
 
 class TranslationController extends Controller
 {
-	use Crud;
+    use Crud;
 
-	public function show($id, $translation)
-	{
-		//	Get the model instance
-		$model = $this->getModelInstance($id)->translateOrNew($translation);
-		$foreign_key = snake_case(class_basename($this->model))."_id";
+    public function show($id, $translation)
+    {
+        //	Get the model instance
+        $parent = $this->getModelInstance($id);
+        $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
+        $parent_name = $parent->$select_parent_name;
+        $model = $parent->translateOrNew($translation);
+        $foreign_key = snake_case(class_basename($this->model))."_id";
 
-		$model->$foreign_key = $id;
+        //var_dump(class_basename($this->model));
+        //var_dump($foreign_key);
 
-		//	Get all the fields wich will be shown in the edit form
-		$fields = new RenderDetail($this->getFieldsForEdit());
+        $model->$foreign_key = $id;
 
-		//	Render the view
-		return view('crud::templates.translation', $this->parseViewData(compact('model','fields', 'translation')));
-	}
+        //	Get all the fields wich will be shown in the edit form
+        $fields = new RenderDetail($this->getFieldsForEdit());
+
+        //	Render the view
+        return view('crud::templates.translation', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'foreign_key', 'fields', 'translation')));
+    }
 
 
-	public function update(Request $request, $id, $translation)
-	{
-		//	Get the model instance
-		$model = $this->getModelInstance($id);
+    public function update(Request $request, $id, $translation)
+    {
+        //	Validate the request with the specified validation rules and messages
+        $this->validate($request, $this->getValidationRulesOnUpdate(), $this->getValidationMessagesOnUpdate());
 
-		$payload = $this->getPayloadOnUpdate($request->all());
+        //	Get the model instance
+        $model = $this->getModelInstance($id);
 
-		$model->translateOrNew($translation)->fill($payload);
-		$model->save();
+        $payload = $this->getPayloadOnUpdate($request->all());
 
-		$this->flash('The changes has been saved');
+        // Add user_id to payload
+        if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+            $payload['updated_by'] = \Auth::user()->id;
+        }
 
-		return back();
-	}
+        $model->translateOrNew($translation)->fill($payload);
+        $model->save();
 
+        $this->flash('The changes has been saved');
+
+        return back();
+    }
 }

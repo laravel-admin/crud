@@ -2,6 +2,7 @@
 
 namespace LaravelAdmin\Crud\Traits;
 
+use Carbon\Carbon;
 
 /**
  * Use this trait in a admin controller
@@ -14,7 +15,6 @@ trait Crud
 	 * An example of a call is $this->model('find', 1) is the same as User::find(1)
 	 * @return Builder
 	 */
-
 	protected function model()
 	{
 		//	Validate the given model name
@@ -69,7 +69,9 @@ trait Crud
 	 */
 	protected function getValidationRulesOnStore()
 	{
-		return $this->getValidationRulesOnUpdate();
+		return [
+			'name' => 'required|string',
+		];
 	}
 
 	/**
@@ -79,7 +81,7 @@ trait Crud
 	 */
 	protected function getValidationMessagesOnStore()
 	{
-		return $this->getValidationRulesOnUpdate();
+		return $this->getValidationRulesOnStore();
 	}
 
 	/**
@@ -116,14 +118,47 @@ trait Crud
  	protected function getPayloadOnUpdateDefaults(array $payload)
  	{
  		$return = [];
- 		foreach ($this->getFieldsForEdit() as $item)
+
+		foreach ($this->getFieldsForEdit() as $item)
  		{
- 			if (array_key_exists($item['id'], $payload)) $return[$item['id']] = $payload[$item['id']];
+			//var_dump($item);
+			//var_dump($item['field']);
+			//var_dump($payload[$item['id']]);
+
+			if (array_key_exists($item['id'], $payload)){
+
+				switch($item['field']){
+					case 'date':
+						$return[$item['id']] = (!is_null($payload[$item['id']])) ? Carbon::createFromFormat('d-m-Y', $payload[$item['id']])->format('Y-m-d') : null;
+						break;
+
+					default:
+						$return[$item['id']] = $payload[$item['id']];
+						break;
+
+				}
+
+			}
+
+ 			//if (array_key_exists($item['id'], $payload)) $return[$item['id']] = $payload[$item['id']];
  		}
 
 		return $return;
  	}
 
+    protected function getRelationsOnUpdate(array $payload)
+ 	{
+        $return = [];
+
+		foreach ($this->getFieldsForEdit() as $item) {
+            if(strpos($item['id'], '[]') > 0) {
+                $relation = str_replace('[]', '', $item['id']);
+                $return[$relation] = array_key_exists($relation, $payload) ? $payload[$relation] : null;
+            }
+ 		}
+
+        return $return;
+ 	}
 
 	/**
 	 * Get the default validation rules when storing a new model
@@ -131,9 +166,7 @@ trait Crud
 	 */
 	protected function getValidationRulesOnUpdate()
 	{
-		return [
-			'title' => 'required|string',
-		];
+		return $this->getValidationRulesOnStore();
 	}
 
 	/**
@@ -142,7 +175,7 @@ trait Crud
 	 */
 	protected function getValidationMessagesOnUpdate()
 	{
-		return [];
+		return $this->getValidationRulesOnUpdate();
 	}
 
 	/**
@@ -151,7 +184,14 @@ trait Crud
 	 */
 	protected function getFieldsForCreate()
 	{
-		return $this->getFieldsForEdit();
+		//$this->getFieldsForEdit();
+	    return [
+			[
+	            'id'        =>  'name',
+	            'label'     =>  'Name',
+	            'field'     =>  'text',
+	        ],
+		];
 	}
 
 
@@ -161,7 +201,8 @@ trait Crud
 	 */
 	protected function getFieldsForEdit()
 	{
-		return [];
+		//return [];
+		return $this->getFieldsForCreate();
 	}
 
 	/**
@@ -171,15 +212,21 @@ trait Crud
 
 	protected function getFieldsForList()
 	{
-		//	Defaults: Title and Created date
+		// //	Defaults: Title and Created date
+		// return [
+		// 	'title'	=> ['label' => 'Title', 'formatter'=>'title'],
+		//
+		// 	//	Added a closure to format the default value
+		// 	'created' => ['label' => 'Created', 'formatter' => function($model)
+		// 	{
+		// 		return $model->created_at->format('Y-m-d');
+		// 	}],
+		// ];
 		return [
-			'title'	=> ['label' => 'Title', 'formatter'=>'title'],
-
-			//	Added a closure to format the default value
-			'created' => ['label' => 'Created', 'formatter' => function($model)
-			{
-				return $model->created_at->format('Y-m-d');
-			}],
+			['id' => 'name', 'label' => 'Name'],
+	        ['id' => 'created_at', 'label' => 'Created', 'formatter' => function($model) {
+                return $model->created_at->format('Y-m-d');
+            }],
 		];
 	}
 
@@ -190,12 +237,22 @@ trait Crud
 	 */
 	protected function parseViewData(array $data = [])
 	{
-		$data['singular_name'] = $this->singular_name;
-		$data['plural_name']   = $this->plural_name;
-		$data['route']         = $this->getRouteName();
-		$data['parent_route']  = $this->getRouteName(2);
-		$data['layout']        = $this->layout();
-		$data['submenu'] 	   = $this->getSubmenu();
+		$data['handle_bulk'] = (property_exists($this, 'handle_bulk')) ? $this->handle_bulk : false;
+		if($data['handle_bulk']){
+			$data['submenu_bulk'] = $this->getSubmenuBulk();
+		}
+		$data['list_order_by']	= (property_exists($this, 'list_order_by')) ? $this->list_order_by : null;
+		$data['list_search_on']	= (property_exists($this, 'list_search_on')) ? $this->list_search_on : null;
+
+		$data['singular_name']  = $this->singular_name;
+		$data['plural_name']    = (property_exists($this, 'plural_name')) ? $this->plural_name : null;
+		$data['route']          = $this->getRouteName();
+		$data['parent_route']   = $this->getRouteName(2);
+		$data['layout']         = $this->layout();
+		$data['submenu'] 	    = $this->getSubmenu();
+
+        $data['allow_create'] 	    = (property_exists($this, 'allow_create')) ? $this->allow_create : true;
+        $data['allow_delete'] 	    = (property_exists($this, 'allow_delete')) ? $this->allow_delete : true;
 
 		//	TODO: What else
 
@@ -224,11 +281,20 @@ trait Crud
 
 		if ($action == "index" && method_exists($this, 'getSubmenuForList')) return $this->getSubmenuForList();
 		if ($action == "create" && method_exists($this, 'getSubmenuForCreate')) return $this->getSubmenuForCreate();
-		if ( ($action == "edit" || $action == 'show') && method_exists($this, 'getSubmenuForEdit')) return $this->getSubmenuForEdit();
+		if (($action == "edit" || $action == 'show') && method_exists($this, 'getSubmenuForEdit')) return $this->getSubmenuForEdit();
 
 		return [];
 	}
 
+	/**
+	 * Get submenu for bulk actions
+	 *
+	 * @return
+	 */
+	protected function getSubmenuBulk()
+	{
+		if (method_exists($this, 'getFieldsForBulk')) return $this->getFieldsForBulk();
+	}
 
 	protected function getRouteName($pop=1)
 	{

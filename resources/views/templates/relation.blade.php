@@ -3,7 +3,9 @@
 @section('content')
 
 <form action="{{ route("{$route}store", $model->id) }}" method="post" class="form-horizontal">
+
 	{{ csrf_field() }}
+
 	<div class="container">
 
 		<div class="page-header">
@@ -41,7 +43,9 @@
 				</tbody>
 			</table>
 		</div>
+
 	</div>
+	
 </form>
 
 @stop

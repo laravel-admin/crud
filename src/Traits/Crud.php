@@ -90,7 +90,8 @@ trait Crud
 	 */
 	protected function getPayloadOnStore(array $payload)
 	{
-		return $this->getPayloadOnUpdate($payload);
+		//return $this->getPayloadOnUpdate($payload);
+        return $this->getPayloadOnStoreDefaults($payload);
 	}
 
 	protected function getPayloadOnStoreDefaults(array $payload)

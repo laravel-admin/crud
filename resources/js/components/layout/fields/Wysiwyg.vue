@@ -16,7 +16,7 @@
                 content: (!this.data || typeof this.data == 'object') ? '' : this.data,
                 options: {
                     height : "200",
-                    plugins: ['lists', 'link', 'code', 'charmap'],
+                    plugins: ['lists', 'link', 'code', 'charmap', 'paste'],
                     menubar: '',
                     toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | charmap | link unlink | removeformat | code',
                 }

@@ -59,7 +59,7 @@
         				:layoutsettings="{{ json_encode($settings ?: []) }}"
         			></layout>
                     @else
-                    <p>Please use the widget setup for the selected language first.</p>
+                    <p>Please use the content setup for the selected language first.</p>
                     @endif
 
                 </div>

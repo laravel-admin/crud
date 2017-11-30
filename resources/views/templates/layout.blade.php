@@ -26,7 +26,7 @@
 				    Copy widgets from <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value) @continue ($key == $translation)
-				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $translation]) }}?copy={{ $key }}">{{ $value }} widget setup</a></li>
+				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $translation]) }}?copy={{ $key }}" data-confirm="Beware, you are now overwriting all widgets from this language!">{{ $value }} widget setup</a></li>
 					@endforeach</ul>
 				</div>
 				@endif
@@ -42,7 +42,7 @@
 
 			@if (!empty($submenu))
 				@include('crud::templates.submenu')
-            	<div class="col-md-9">
+            	<div class="col-md-10">
 			@else
 				<div class="col-xs-12">
 			@endif

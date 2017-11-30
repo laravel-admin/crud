@@ -52,7 +52,9 @@
 						<thead>
 							<tr>
 								@if($handle_bulk)<th width="25"><input type="checkbox" class="check-all" data-scope=".check-item"></th>@endif
-								@foreach ($fields->headings() as $heading) <th>	{{ $heading['label'] }} <a href="{{ $fields->getOrderLink($heading['id']) }}" class="fa fa-fw fa-sort text-muted"></a> </th> @endforeach
+								@foreach ($fields->headings() as $heading) 
+									<th>{{ $heading['label'] }} @if($heading['id'])<a href="{{ $fields->getOrderLink($heading['id']) }}" class="fa fa-fw fa-sort text-muted"></a>@endif</th> 
+								@endforeach
 							</tr>
 						</thead>
 						<tbody>

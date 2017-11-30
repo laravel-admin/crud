@@ -1,4 +1,4 @@
-<div class="col-sm-3">
+<div class="col-sm-2">
 
 	<div class="panel panel-default">
 		<div class="panel-heading">

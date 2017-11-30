@@ -18,7 +18,7 @@
 
 		@if (!empty($submenu))
 			@include('crud::templates.submenu')
-	    	<div class="col-md-9">
+	    	<div class="col-md-10">
 		@else
 			<div class="col-xs-12">
 		@endif

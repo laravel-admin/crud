@@ -3,20 +3,7 @@
 This package is experimental, don't use it for production.
 
 ##  Installation
-
-This package is not yet available with packagist, so you have to create a repositories section in you composer.json file.
-
-```
-"repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laravel-admin/crud"
-        }
-]
-```
-
-Now you can add the package with composer
-
+Install from Packagist:
 ```
 composer require laravel-admin/crud
 ```

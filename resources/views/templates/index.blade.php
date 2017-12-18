@@ -7,19 +7,21 @@
 	<div class="page-header">
 
 	    <div class="pull-right">
-			@if($handle_bulk && !empty($submenu_bulk))
+			@if($handle_bulk)
 			<div class="btn-group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Bulk actions <span class="caret"></span>
 		        </button>
 				<ul class="dropdown-menu bulk-actions">
-					@foreach ($submenu_bulk as $item)
-                        @if($item['allow_action'])
-                            <li><a href="{!! route("{$route}store") !!}?action=set&amp;type={{ $item['id'] }}">{{ $item['label_action'] }}</a></li>
-                        @endif
-					@endforeach
-                    @if($allow_delete)
-					<li role="separator" class="divider"></li>
+					@if(!empty($submenu_bulk))	
+						@foreach ($submenu_bulk as $item)
+							@if($item['allow_action'])
+								<li><a href="{!! route("{$route}store") !!}?action=set&amp;type={{ $item['id'] }}">{{ $item['label_action'] }}</a></li>
+							@endif
+						@endforeach
+						<li role="separator" class="divider"></li>
+					@endif
+					@if($allow_delete)
 					<li><a href="{!! route("{$route}store") !!}?action=delete" class="text-danger">Delete</a></li>
                     @endif
 				</ul>

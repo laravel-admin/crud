@@ -12,23 +12,27 @@
 			@if ($translation)
             <div class="pull-right">
 				@if ($languages = config('translatable.labels'))
-				<div class="btn-group">
-				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				    {{ strtoupper($translation) }} <span class="caret"></span>
-				  </button>
-				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
-				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $key]) }}">{{ strtoupper($key) }}</a></li>
-					@endforeach</ul>
-				</div>
+					<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						{{ strtoupper($translation) }} <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">@foreach ($languages as $key=>$value)
+						<li><a href="{{ route("{$route}show", [$model->$foreign_key, $key]) }}">{{ strtoupper($key) }}</a></li>
+						@endforeach</ul>
+					</div>
 
-                <div class="btn-group">
-				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				    Copy widgets from <span class="caret"></span>
-				  </button>
-				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value) @continue ($key == $translation)
-				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $translation]) }}?copy={{ $key }}" data-confirm="Beware, you are now overwriting all widgets from this language!">{{ $value }} widget setup</a></li>
-					@endforeach</ul>
-				</div>
+					@if($model->slug)
+						<div class="btn-group">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Copy widgets from <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								@foreach ($languages as $key=>$value) @continue ($key == $translation)
+									<li><a href="{{ route("{$route}show", [$model->$foreign_key, $translation]) }}?copy={{ $key }}" data-confirm="Beware, you are now overwriting all widgets from this language!">{{ $value }} widget setup</a></li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
 				@endif
 
             </div>

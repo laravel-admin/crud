@@ -5,5 +5,6 @@
             <input type="text" name="{{ $field->id() }}" class="form-control {{ $field->css_classes() }}" value="{!! old($field->id(), $field->format($model)) !!}" />
             <span class="input-group-addon"><i></i></span>
         </div>
+		@include('crud::fields.field-description')
     </div>
 </div>

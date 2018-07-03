@@ -8,5 +8,6 @@
 				</option>
 			@endforeach
 		</select>
+		@include('crud::fields.field-description')
 	</div>
 </div>

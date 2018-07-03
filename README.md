@@ -72,6 +72,7 @@ protected function getFieldsForCreate()
      [
        'id' => 'title',
        'label' => 'Title',
+       'description' => 'This is the main title of the page',
        'field' => 'text',
      ],
      [

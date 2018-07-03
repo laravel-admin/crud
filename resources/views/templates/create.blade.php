@@ -35,3 +35,5 @@
 </div>
 
 @stop
+
+@include('crud::templates.tinymce')

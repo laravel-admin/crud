@@ -192,16 +192,27 @@ import Event from '../../../../../base/resources/js/Event';
 			save()
 			{
                 const notify = () => {
-                    Event.$emit('notification', {type: 'success', message: 'The layout is succesfully saved'});
+                    Event.$emit('notification', {type: 'success', message: 'The layout is succesfully saved.'});
                 };
-                const error = () => {
-                    Event.$emit('notification', {type: 'danger', message: 'Saving failed'});
-                };
+				const flash_error = (data) => {
+					let message = data.message;
+					for (var key in data.errors) {
+						if (data.errors.hasOwnProperty(key)) {
+							message = data.errors[key].toString();
+							break;
+						}
+					}
+					Event.$emit('notification', {type: 'danger', message: message});
+				};
 				if (this.locale) {
-					axios.put(this.controller, {layout:this.checkedData}).then(notify).catch(error);
+					axios.put(this.controller, {layout:this.checkedData}).then(notify).catch(error => {
+						flash_error(error.response.data);
+					});
 				}
 				else {
-					axios.post(this.controller, {layout:this.checkedData}).then(notify).catch(error);
+					axios.post(this.controller, {layout:this.checkedData}).then(notify).catch(error => {
+						flash_error(error.response.data);
+					});
 				}
 			}
 		}

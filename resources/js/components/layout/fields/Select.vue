@@ -6,6 +6,7 @@
                 <option value="">---</option>
                 <option v-for="(label,value) in settings.options" :value="value" v-text="label" :selected="data == value"></option>
             </select>
+            <p v-if="settings.description" style="padding-top:6px;">{{ settings.description }}</p>
 		</div>
 	</div>
 </template>

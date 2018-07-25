@@ -3,6 +3,7 @@
         <label :for="settings.id" class="col-sm-3 control-label">{{ settings.name }}</label>
         <div class="col-sm-9">
             <tinymce :id="makeid" :options="options" @change="updateData" :content="content"></tinymce>
+            <p v-if="settings.description" style="padding-top:6px;">{{ settings.description }}</p>
         </div>
 	</div>
 </template>

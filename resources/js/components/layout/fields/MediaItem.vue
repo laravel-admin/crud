@@ -2,7 +2,7 @@
 	<div class="form-group">
 		<label :for="settings.id" class="col-sm-3 control-label">{{ settings.name }}</label>
 		<div class="col-sm-9">
-            <media-item controller="/media/ajax" :item="item" @update-media-item="updateMediaItem"></media-item>
+			<media-item controller="/media/ajax" :filetypes="settings.filetypes" :item="item" @update-media-item="updateMediaItem"></media-item>
 			<p v-if="settings.description" style="padding-top:6px;">{{ settings.description }}</p>
 		</div>
 	</div>

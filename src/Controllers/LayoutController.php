@@ -122,6 +122,7 @@ class LayoutController extends Controller
         $model = $this->getModelInstance($id);
 
         $payload = ['layout' => $request->layout];
+
         // Add user_id to payload
         if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
             $payload['updated_by'] = \Auth::user()->id;
@@ -139,9 +140,30 @@ class LayoutController extends Controller
         $validation_rules = $default;
         $validation_messages = [];
         $config = config('layout');
-        foreach ($config['components'] as $key => $value) {
-            foreach ($value['fields'] as $fieldId => $field) {
-                if (isset($field['validate_rule'])) {
+        foreach ($config['components'] as $value) {
+            foreach ($value['fields'] as $field) {
+                if ($field['type'] === 'layout-repeater') {
+                    foreach ($field['children'] as $child_field) {
+                        if (isset($child_field['validate_rule'])) {
+                            $validation_rules[] = [
+                                "layout.*.content.{$field['id']}.*.{$child_field['id']}" => $child_field['validate_rule']
+                            ];
+
+                            if (isset($child_field['validate_message'])) {
+                                foreach ($child_field['validate_message'] as $rule => $message) {
+                                    $validation_messages[] = [
+                                        "layout.*.content.{$field['id']}.*.{$child_field['id']}.{$rule}" => $message
+                                    ];
+                                }
+                            } else {
+                                $name = strtolower($child_field['name']);
+                                $validation_messages[] = [
+                                    "layout.*.content.{$field['id']}.*.{$child_field['id']}.required" => "The {$name} field is required."
+                                ];
+                            }
+                        }
+                    }
+                } elseif (isset($field['validate_rule'])) {
                     $validation_rules[] = [
                         "layout.*.content.{$field['id']}" => $field['validate_rule']
                     ];

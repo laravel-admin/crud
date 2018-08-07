@@ -5,7 +5,7 @@
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
-        "laravel-admin": "^0.2"
+        "laravel-admin/base": "^0.2"
     },
 	"autoload": {
 	   "psr-4": {

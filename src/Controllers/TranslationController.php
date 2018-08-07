@@ -5,14 +5,17 @@ namespace LaravelAdmin\Crud\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use LaravelAdmin\Crud\Fields\RenderDetail;
+use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
 
 class TranslationController extends Controller
 {
-    use Crud;
+    use Crud, CanBeSecured;
 
     public function show($id, $translation)
     {
+        $this->checkRole();
+
         //	Get the model instance
         $parent = $this->getModelInstance($id);
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
@@ -35,6 +38,8 @@ class TranslationController extends Controller
 
     public function update(Request $request, $id, $translation)
     {
+        $this->checkRole();
+
         //	Validate the request with the specified validation rules and messages
         $this->validate($request, $this->getValidationRulesOnUpdate(), $this->getValidationMessagesOnUpdate());
 

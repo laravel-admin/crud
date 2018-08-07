@@ -4,11 +4,12 @@ namespace LaravelAdmin\Crud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
 
 class LayoutController extends Controller
 {
-    use Crud;
+    use Crud, CanBeSecured;
 
     /**
      * Show the layout
@@ -17,6 +18,8 @@ class LayoutController extends Controller
      */
     public function index(Request $request, $id)
     {
+        $this->checkRole();
+
         //	Get the model instance
         $model = $this->getModelInstance($id);
 
@@ -39,6 +42,8 @@ class LayoutController extends Controller
      */
     public function create()
     {
+        $this->checkRole();
+
         return (new \LaravelAdmin\Crud\Layout\Config())->all();
     }
 
@@ -49,6 +54,8 @@ class LayoutController extends Controller
      */
     public function show(Request $request, $id, $translation)
     {
+        $this->checkRole();
+
         //	Get the model instance
         $parent = $this->getModelInstance($id);
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
@@ -87,6 +94,8 @@ class LayoutController extends Controller
      */
     public function store(Request $request, $id)
     {
+        $this->checkRole();
+
         //	Validate the request with the specified validation rules and messages
         $validation = $this->setupValidation(['layout' => 'array']);
         $this->validate($request, $validation->rules, $validation->messages);
@@ -114,6 +123,8 @@ class LayoutController extends Controller
      */
     public function update(Request $request, $id, $translation)
     {
+        $this->checkRole();
+
         //	Validate the request with the specified validation rules and messages
         $validation = $this->setupValidation(['layout' => 'array']);
         $this->validate($request, $validation['rules'], $validation['messages']);

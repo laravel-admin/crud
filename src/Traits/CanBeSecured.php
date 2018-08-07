@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Gate;
  */
 trait CanBeSecured
 {
-    protected $authorizedRoles = [];
-
     /**
      * Enforce that the user has one of the authorized roles, abort otherwise
      */

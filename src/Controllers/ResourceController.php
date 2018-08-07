@@ -3,14 +3,15 @@
 namespace LaravelAdmin\Crud\Controllers;
 
 use App\Http\Controllers\Controller;
-use LaravelAdmin\Crud\Fields\RenderList;
-use LaravelAdmin\Crud\Fields\RenderDetail;
 use Illuminate\Http\Request;
+use LaravelAdmin\Crud\Fields\RenderDetail;
+use LaravelAdmin\Crud\Fields\RenderList;
+use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
 
 abstract class ResourceController extends Controller
 {
-    use Crud;
+    use Crud, CanBeSecured;
 
     /**
      * List all records of the model
@@ -18,6 +19,8 @@ abstract class ResourceController extends Controller
      */
     public function index(Request $request)
     {
+        $this->checkRole();
+
         //	Get all records of the model and set default ordering
         $builder = $this->model('orderBy', $request->orderby ?: ((property_exists($this, 'list_order_by')) ? $this->list_order_by : 'name'), $request->order ?: ((property_exists($this, 'list_order')) ? $this->list_order : 'desc'));
 
@@ -47,6 +50,8 @@ abstract class ResourceController extends Controller
      */
     public function create()
     {
+        $this->checkRole();
+
         // Create new instance of the model
         $model = $this->model();
 
@@ -64,6 +69,8 @@ abstract class ResourceController extends Controller
     */
     public function store(Request $request)
     {
+        $this->checkRole();
+
         // Check for bulk action
         if ($request->has('action') && $request->has('record')) {
             // Handle bulk action
@@ -98,6 +105,8 @@ abstract class ResourceController extends Controller
      */
     public function edit($id)
     {
+        $this->checkRole();
+
         //	Get the model instance
         $model = $this->getModelInstance($id);
 
@@ -116,6 +125,8 @@ abstract class ResourceController extends Controller
      */
     public function update(Request $request, $id, $redirect=true)
     {
+        $this->checkRole();
+
         //	Validate the request with the specified validation rules and messages
         $this->validate($request, $this->getValidationRulesOnUpdate(), $this->getValidationMessagesOnUpdate());
 
@@ -159,6 +170,8 @@ abstract class ResourceController extends Controller
     */
     public function destroy($id)
     {
+        $this->checkRole();
+
         //	Get the model instance
         $model = $this->getModelInstance($id);
 

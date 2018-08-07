@@ -16,6 +16,10 @@ trait CanBeSecured
      */
     protected function checkRole() : void
     {
+        if (!isset($this->authorizedRoles)) {
+            abort(500, 'You must define $this->authorizedRoles in all Administration controllers');
+        }
+
         $authorized = false;
 
         // If there are no authorized roles specified ($authorizedRoles = [])

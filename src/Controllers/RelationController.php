@@ -39,11 +39,4 @@ abstract class RelationController extends Controller
 
         return back();
     }
-
-    // protected function getFieldsForList()
-    // {
-    // 	return [
-    // 		['id' => 'name', 'label' => 'Name'],
-    // 	];
-    // }
 }

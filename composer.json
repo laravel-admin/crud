@@ -4,7 +4,9 @@
     "type": "laravel-package",
     "license": "MIT",
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "laravel-admin": "^0.2"
+    },
 	"autoload": {
 	   "psr-4": {
 		   "LaravelAdmin\\Crud\\": "src"

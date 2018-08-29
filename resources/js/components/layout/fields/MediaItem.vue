@@ -15,17 +15,18 @@
             return {item:null};
         },
 
-		props: ['settings','data','index'],
+		props: ['settings', 'data', 'index', 'watcher_index'],
 
         mounted() {
             this.getMediaItem();
         },
 
 		watch : {
-		   data : function (value) {
-			 this.getMediaItem();
-		   }
-	   },
+			watcher_index : function () {
+				console.log('update mediaitem');
+				this.getMediaItem();
+			}
+	    },
 
         methods: {
 
@@ -38,7 +39,9 @@
 	                axios({url:'/media/ajax/'+this.data, method:'get'}).then(response => {
 	                    this.item = response.data;
 	                });
-	            }
+	            } else {
+					this.item = null;
+				}
 			}
 
         }

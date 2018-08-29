@@ -7,7 +7,10 @@
                     {{ $option->name }}
                 </option>
                 @if(count($option->childs))
-                    @include('crud::fields.select-parent-child-childs',['prefix' => ' - ', 'childs' => $option->childs])
+                    @include('crud::fields.select-parent-child-childs',['prefix' => ' --> ', 'childs' => $option->childs])
+                @endif
+                @if(count($option->children))
+                    @include('crud::fields.select-parent-child-childs',['prefix' => ' --> ', 'childs' => $option->children])
                 @endif
             @endforeach
         </select>

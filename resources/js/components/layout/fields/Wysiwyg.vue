@@ -10,7 +10,7 @@
 
 <script>
     export default {
-		props: ['settings','data','index'],
+		props: ['settings', 'data', 'index', 'watcher_index'],
 
         data() {
             return {
@@ -24,13 +24,14 @@
             }
         },
 
+        watch : {
+            watcher_index : function () {
+                console.log('update wysiwyg');
+                this.content = (!this.data || typeof this.data == 'object') ? '' : this.data;
+            }
+	    },        
+
         computed: {
-
-            /*parsedData() {
-                if (!this.data || typeof this.data == 'object') return '';
-
-                return this.data;
-            },*/
 
             makeid()
             {

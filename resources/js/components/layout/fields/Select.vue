@@ -13,6 +13,6 @@
 
 <script>
     export default {
-		props: ['settings','data','index']
+		props: ['settings', 'data', 'index', 'watcher_index']
     }
 </script>

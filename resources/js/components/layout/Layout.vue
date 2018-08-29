@@ -1,43 +1,57 @@
 <template>
+
     <div v-if="settings">
 
 		<div class="panel panel-default">
-			<div class="panel-heading nav navbar-default">
-                <div>
-                    <ul class="nav navbar-nav navbar-left">
 
-                        <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li v-for="component in settings.components"><a href="#" class="" v-on:click.prevent="appendComponent(component)">{{ component.name }}</a></li>
-                    		</ul>
-                    	</li>
+			<div class="panel-heading">
+                
+				<div class="btn-group pull-right" v-show="this.hastranslation=='true'">
+                    
+					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Add <span class="caret"></span>
+					</button>
 
-						<li>
-							<a href="#" @click.prevent="save">Save</a>
-						</li>
-                    </ul>
+					<ul class="dropdown-menu">
+						<li v-for="component in settings.components"><a href="#" class="" v-on:click.prevent="appendComponent(component)">{{ component.name }}</a></li>
+					</ul>
+
                 </div>
-            </div>
-	    </div>
 
-			<layout-component
-				v-for="(component,key) in checkedData"
-				:key="key"
-				:index="key"
-				:data="component"
-				:locale="locale"
-				:length="checkedData.length"
-				:components="settings.components"
-				:settings="getSettingsForComponent(component.settings.type)"
-				@update="updateComponent"
-				@append="appendComponent"
-				@delete="deleteComponent"
-				@moveup="moveComponentUp"
-				@movedown="moveComponentDown"
-			></layout-component>
+				<h3 class="panel-title">{{ this.language }} layout setup</h3>
+
+            </div>
+
+			<div class="panel-body" v-show="this.hastranslation=='false'">
+				
+				<p>Please use the content setup for the selected language first.</p>
+
+			</div>
+
+			<div class="panel-body" v-show="this.hastranslation=='true'">
+
+				<layout-component
+					v-for="(component,key) in checkedData"
+					:key="key"
+					:index="key"
+					:data="component"
+					:locale="locale"
+					:length="checkedData.length"
+					:components="settings.components"
+					:settings="getSettingsForComponent(component.settings.type)"
+					@update="updateComponent"
+					@append="appendComponent"
+					@delete="deleteComponent"
+					@moveup="moveComponentUp"
+					@movedown="moveComponentDown"
+				></layout-component>
+
+			</div>
+
+		</div>
 
     </div>
+
 </template>
 
 <script>
@@ -49,27 +63,21 @@ import Event from '../../../../../base/resources/js/Event';
 			'layout-component': require('./Component.vue'),
         },
 
-		props: ['layoutdata', 'layoutsettings', 'locale', 'controller'],
+		props: ['layoutdata', 'layoutsettings', 'hastranslation', 'language', 'locale', 'controller'],
 
 		data()
 		{
 			return {
 				//	Initialise settings object, who will be filled by an ajax request
-				settings:this.layoutsettings,
+				settings: this.layoutsettings,
 
 				//	The data of the current object
-				//	TODO: This data has to be fetch from the HTML or with ajax
-				data: this.layoutdata,
+				data: this.addWatcherIndexToLayoutData(),
 			};
 		},
 
         mounted() {
             console.log('Layout component mounted.');
-
-			//	Get the settings for the layout module
-			//axios.get(this.controller.substr(0,-2)+'create').then(response => this.settings = response.data);
-			//axios.get(this.controller).then(response => this.data = response.data.layout ? response.data.layout : []);
-
         },
 
 		computed: {
@@ -79,9 +87,9 @@ import Event from '../../../../../base/resources/js/Event';
                 return this.data.filter(item => {
                     if (typeof item.settings.type == 'undefined') {
                         return false;
-                    }
+					}
 
-                    return  this.getSettingsForComponent(item.settings.type) ? true : false;
+					return this.getSettingsForComponent(item.settings.type) ? true : false;
                 });
             }
 
@@ -89,6 +97,20 @@ import Event from '../../../../../base/resources/js/Event';
 
 		methods:
 		{
+			generateUniqueId(val){
+				return (Math.random() * (val+1)).toString(36).substr(2, 16);
+			},
+
+			addWatcherIndexToLayoutData() {
+				let settings = this.layoutdata;
+				
+				settings.forEach((item, index) => {
+					settings[index].watcher_index = this.generateUniqueId(index);
+				});
+
+				return settings;
+			},
+
 			/**
 			 * Append a component to the layout
 			 * @param object component
@@ -102,7 +124,8 @@ import Event from '../../../../../base/resources/js/Event';
 						name: component.name,
 						active: true,
 						type: component.id,
-					}
+					},
+					watcher_index: this.generateUniqueId(index+1)
 				};
 
 				this.data.push(obj);
@@ -149,7 +172,6 @@ import Event from '../../../../../base/resources/js/Event';
 				this.data.splice(index,1);
 				this.data.splice(index-1, 0, item);
 			},
-
 
 			/**
 			 * Get the settings for the component wich has to be rendered
@@ -218,20 +240,3 @@ import Event from '../../../../../base/resources/js/Event';
 		}
     }
 </script>
-
-<style>
-
-/* CSS used here will be applied after bootstrap.css */
-/*
-Using default Bootstrap 3 classes we zero out the top and
-bottom padding .panel-heading ususally needs
-*/
-.panel-heading.nav.navbar-default{padding-top:0px;padding-bottom:0px;}
-
-/*
-Reintroduce 20px for .panel-title when a navbar is within .panel-heading.
-This can be put back to @line-height-computed; in your LESS file which
-is the default in type.less */
-.panel-heading.nav.navbar-default h3{margin-top:20px;}
-.panel-heading.nav.navbar-default h4{margin-top:15px;}
-</style>

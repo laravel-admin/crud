@@ -60,6 +60,7 @@ class LayoutController extends Controller
         $parent = $this->getModelInstance($id);
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
         $parent_name = $parent->$select_parent_name;
+        $has_translation = $parent->hasTranslation($translation);
         $model = $parent->translateOrNew($translation);
         $foreign_key = snake_case(class_basename($this->model)) . '_id';
 
@@ -83,7 +84,7 @@ class LayoutController extends Controller
         $settings = (new \LaravelAdmin\Crud\Layout\Config())->all();
 
         //	Render the view
-        return view('crud::templates.layout', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'settings', 'translation', 'foreign_key')));
+        return view('crud::templates.layout', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'settings', 'has_translation', 'translation', 'foreign_key')));
     }
 
     /**

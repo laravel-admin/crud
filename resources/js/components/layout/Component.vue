@@ -1,46 +1,50 @@
 <template>
-    <div class="panel panel-default">
-		<div class="panel-heading nav navbar-default">
-            <div>
-                <div class="pull-left">
-                     <h3 class="panel-title">{{ data.settings.name }}</h3>
-                </div>
+    
+	<div class="panel panel-default">
+	
+		<div class="panel-heading">
 
-                <div>
-                    <ul class="nav navbar-nav navbar-right">
-						<li :class="{'active':view=='content'}">
-							<a href="#" @click.prevent="setView('content')">Content</a>
-						</li>
+			<div class="btn-group pull-right">
+				
+				<button type="button" class="btn btn-default btn-xs" :class="{'active':view=='content'}" @click.prevent="setView('content')">
+					Content
+				</button>
 
-						<li :class="{'active':view=='settings'}">
-							<a href="#" @click.prevent="setView('settings')">Settings</a>
-						</li>
+				<button type="button" class="btn btn-default btn-xs" :class="{'active':view=='settings'}" @click.prevent="setView('settings')">
+					Settings
+				</button>
 
-                        <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></a>
+				<div class="btn-group">
+					
+					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Action <span class="caret"></span>
+					</button>
 
-                            <ul class="dropdown-menu">
-								<li v-if="index"><a href="#" class="" @click.prevent="$emit('moveup', index)">Move up</a></li>
-								<li v-if="index < length-1"><a href="#" class="" @click.prevent="$emit('movedown', index)">Move down</a></li>
-								<li><a href="#" class="" @click.prevent="$emit('delete', index)">Delete</a></li>
-								<li role="separator" class="divider"></li>
-								<li v-for="component in components"><a href="#"  v-on:click.prevent="$emit('append', component, index)">Add {{ component.name }}</a></li>
-                    		</ul>
-                    	</li>
-                    </ul>
-                </div>
+					<ul class="dropdown-menu">
+						<li v-if="index"><a href="#" class="" @click.prevent="$emit('moveup', index)">Move up</a></li>
+						<li v-if="index < length-1"><a href="#" class="" @click.prevent="$emit('movedown', index)">Move down</a></li>
+						<li><a href="#" class="" @click.prevent="$emit('delete', index)">Delete</a></li>
+						<li role="separator" class="divider"></li>
+						<li v-for="component in components"><a href="#"  v-on:click.prevent="$emit('append', component, index)">Add {{ component.name }}</a></li>
+					</ul>
 
-            </div>
+				</div>
+
+			</div>
+
+			<h3 class="panel-title">{{ data.settings.name }}</h3>
+
         </div>
 
 		<div class="panel-body" v-show="view == 'content'">
 			<template v-for="field in settings.fields">
-				<component :is="field.type" :settings="field" :data="getDataForField(field.id)" @update="updateContentField"></component>
+				<component :is="field.type" :settings="field" :data="getDataForField(field.id)" :watcher_index="data.watcher_index" :index="index" @update="updateContentField"></component>
 			</template>
 		</div>
 
 		<div class="panel-body" v-show="view == 'settings'">
 			<template v-for="field in componentSettings">
-				<component :is="field.type" :settings="field" :data="data.settings[field.id]" @update="updateSettingsField"></component>
+				<component :is="field.type" :settings="field" :data="data.settings[field.id]" :watcher_index="data.watcher_index" :index="index" @update="updateSettingsField"></component>
 			</template>
 		</div>
 
@@ -67,14 +71,14 @@
 		data()
 		{
 			return {
-					//	Current view
-					view:null,
+				//	Current view
+				view:'content',
 
-					//	The default settings for each component
-					componentSettings: [
-						{id:'name', name:'Name', type:'layout-text'},
-						{id:'active', name:'Active?', type:'layout-boolean'},
-					]
+				//	The default settings for each component
+				componentSettings: [
+					{id:'name', name:'Name', type:'layout-text'},
+					{id:'active', name:'Active?', type:'layout-boolean'},
+				]
 			};
 		},
 

@@ -3,6 +3,9 @@
         {{ $prefix.$child->name }}
     </option>
     @if(count($child->childs))
-        @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' - ', 'childs' => $child->childs])
+        @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' --> ', 'childs' => $child->childs])
+    @endif
+    @if(count($child->children))
+        @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' --> ', 'childs' => $child->children])
     @endif
 @endforeach

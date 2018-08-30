@@ -13,6 +13,11 @@
 
 <script>
     export default {
-		props: ['settings', 'data', 'index', 'watcher_index']
+
+		props: ['settings', 'data', 'index', 'watcher_index'],
+
+		mounted() {
+            this.$emit('update', this.settings.id, (this.data) ? this.data : null, this.index);
+        },
     }
 </script>

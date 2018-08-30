@@ -49,7 +49,7 @@
         methods: {
 
             updateData(editor, content) {
-                this.$emit('update', this.settings.id, content, this.index);
+                this.$emit('update', this.settings.id, (content) ? content : null, this.index);
             }
 
         }

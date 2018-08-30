@@ -85,6 +85,9 @@ import Event from '../../../../../base/resources/js/Event';
             checkedData()
             {
                 return this.data.filter(item => {
+                    if (typeof item.settings == 'undefined') {
+                        return false;
+					}
                     if (typeof item.settings.type == 'undefined') {
                         return false;
 					}
@@ -125,7 +128,7 @@ import Event from '../../../../../base/resources/js/Event';
 						active: true,
 						type: component.id,
 					},
-					watcher_index: this.generateUniqueId(index+1)
+					watcher_index: this.generateUniqueId(this.checkedData.length)
 				};
 
 				this.data.push(obj);
@@ -206,6 +209,9 @@ import Event from '../../../../../base/resources/js/Event';
 
 				//	Does the section (content or setttings) exists on the component
 				if (typeof this.data[index][section] === 'undefined') this.data[index][section] = {};
+				
+				//	Does the field exists on the component
+				if (typeof this.data[index][section][field] === 'undefined') this.data[index][section][field] = {};
 
 				//	Update the data of the field
 				this.data[index][section][field] = data;

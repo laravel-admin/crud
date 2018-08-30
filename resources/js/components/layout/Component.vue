@@ -72,7 +72,7 @@
 		{
 			return {
 				//	Current view
-				view:'content',
+				view:null,
 
 				//	The default settings for each component
 				componentSettings: [

@@ -11,11 +11,11 @@
 <script>
     export default {
 
+		props: ['settings', 'data', 'index', 'watcher_index'],
+
         data() {
             return {item:null};
         },
-
-		props: ['settings', 'data', 'index', 'watcher_index'],
 
         mounted() {
             this.getMediaItem();

@@ -6,9 +6,9 @@ class Config
 {
     protected $data;
 
-    public function __construct(array $data = null)
+    public function __construct(string $config = 'layout', array $data = null)
     {
-        $this->data = $data ?: config('layout');
+        $this->data = $data ?: config($config);
     }
 
     public function all()

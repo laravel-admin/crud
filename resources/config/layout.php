@@ -2,15 +2,19 @@
 
 /**
  * Field types
+ * - layout-boolean
+ * - layout-date
+ * - layout-component-repeater
+ * - layout-media-item (if LaravelAdmin/MediaManager installed)
+ * - layout-repeater
+ * - layout-select
  * - layout-text
  * - layout-textarea
- * - layout-boolean
- * - layout-select
  * - layout-wysiwyg
- * - layout-media-item (if LaravelAdmin/MediaManager installed)
  */
 
 return [
+    'field' => 'layout',
 
     'views' => 'layout.',
 

@@ -12,7 +12,7 @@ class Component
 
     protected $config;
 
-    public function __construct(Model $model, array $component, array $config=null)
+    public function __construct(Model $model, array $component, array $config = null)
     {
         $this->model = $model;
         $this->component = collect($component);
@@ -26,7 +26,7 @@ class Component
 
     public function getView()
     {
-        return config('layout.views').$this->component['settings']['type'];
+        return config('layout.views') . $this->component['settings']['type'];
     }
 
     public function viewExists()
@@ -64,7 +64,7 @@ class Component
                 $content = $this->component['content'][$item['id']];
             }
 
-            return [$item['id']=>$this->getFieldDriver($item, $content)];
+            return [$item['id'] => $this->getFieldDriver($item, $content)];
         });
 
         return $content;
@@ -72,7 +72,7 @@ class Component
 
     protected function getFieldDriver(array $field, $content)
     {
-        $namespace = "\\LaravelAdmin\\Crud\\Layout\\Fields\\";
+        $namespace = '\\LaravelAdmin\\Crud\\Layout\\Fields\\';
 
         $driverOptions = [];
 
@@ -81,7 +81,7 @@ class Component
         }
 
         if (!empty($field['type'])) {
-            $driverOptions[] = $namespace.studly_case($field['type']);
+            $driverOptions[] = $namespace . studly_case($field['type']);
         }
 
         $driverOptions[] = Field::class;
@@ -97,6 +97,6 @@ class Component
 
     public function __toString()
     {
-        return "";
+        return '';
     }
 }

@@ -8,7 +8,7 @@ class LayoutRepeater extends Field
 {
     public $items;
 
-    public function __construct($content, array $config=[])
+    public function __construct($content, array $config = [])
     {
         parent::__construct($content, $config);
 
@@ -29,18 +29,16 @@ class LayoutRepeater extends Field
                     $content = $record[$item['id']];
                 }
 
-                return [$item['id']=>$this->getFieldDriver($item, $content)];
+                return [$item['id'] => $this->getFieldDriver($item, $content)];
             });
         });
 
         return $this->items = $content;
     }
 
-
-
     protected function getFieldDriver(array $field, $content)
     {
-        $namespace = "\\LaravelAdmin\\Crud\\Layout\\Fields\\";
+        $namespace = '\\LaravelAdmin\\Crud\\Layout\\Fields\\';
 
         $driverOptions = [];
 
@@ -49,7 +47,7 @@ class LayoutRepeater extends Field
         }
 
         if (!empty($field['type'])) {
-            $driverOptions[] = $namespace.studly_case($field['type']);
+            $driverOptions[] = $namespace . studly_case($field['type']);
         }
 
         $driverOptions[] = Field::class;

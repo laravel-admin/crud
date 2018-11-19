@@ -84,7 +84,7 @@ abstract class ResourceController extends Controller
         $payload = $this->getPayloadOnStore($request->all());
 
         // Add user_id to payload
-        if(\Schema::hasColumn($this->model()->getTable(), 'created_by')){
+        if (\Schema::hasColumn($this->model()->getTable(), 'created_by')) {
             $payload['created_by'] = \Auth::user()->id;
         }
 
@@ -123,7 +123,7 @@ abstract class ResourceController extends Controller
      * @param  int  $id
      * @return Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $redirect=true)
+    public function update(Request $request, $id, $redirect = true)
     {
         $this->checkRole();
 
@@ -137,7 +137,7 @@ abstract class ResourceController extends Controller
         $payload = $this->getPayloadOnUpdate($request->all());
 
         // Add user_id to payload
-        if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+        if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
             $payload['updated_by'] = \Auth::user()->id;
         }
 
@@ -189,7 +189,7 @@ abstract class ResourceController extends Controller
         $this->flash('The record has been removed');
 
         //	Return to the index page
-        return $this->redirect("index");
+        return $this->redirect('index');
     }
 
     /**

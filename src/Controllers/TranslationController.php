@@ -21,7 +21,7 @@ class TranslationController extends Controller
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
         $parent_name = $parent->$select_parent_name;
         $model = $parent->translateOrNew($translation);
-        $foreign_key = snake_case(class_basename($this->model))."_id";
+        $foreign_key = snake_case(class_basename($this->model)) . '_id';
 
         //var_dump(class_basename($this->model));
         //var_dump($foreign_key);
@@ -34,7 +34,6 @@ class TranslationController extends Controller
         //	Render the view
         return view('crud::templates.translation', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'foreign_key', 'fields', 'translation')));
     }
-
 
     public function update(Request $request, $id, $translation)
     {
@@ -49,7 +48,7 @@ class TranslationController extends Controller
         $payload = $this->getPayloadOnUpdate($request->all());
 
         // Add user_id to payload
-        if(\Schema::hasColumn($this->model()->getTable(), 'updated_by')){
+        if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
             $payload['updated_by'] = \Auth::user()->id;
         }
 

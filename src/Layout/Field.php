@@ -7,7 +7,7 @@ class Field
     public $content;
     protected $config;
 
-    public function __construct($content, array $config=[])
+    public function __construct($content, array $config = [])
     {
         $this->config = $config;
         $this->content = $content;

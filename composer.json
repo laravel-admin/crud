@@ -5,9 +5,9 @@
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {},
-	"autoload": {
-	   "psr-4": {
-		   "LaravelAdmin\\Crud\\": "src"
-		}
-   }
+    "autoload": {
+        "psr-4": {
+            "LaravelAdmin\\Crud\\": "src"
+        }
+    }
 }

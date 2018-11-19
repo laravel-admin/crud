@@ -4,7 +4,6 @@ namespace LaravelAdmin\Crud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use LaravelAdmin\Crud\Fields\RenderDetail;
 use LaravelAdmin\Crud\Fields\RenderList;
 use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
@@ -34,7 +33,7 @@ abstract class RelationController extends Controller
     {
         $this->checkRole();
 
-        $this->validate($request, ['items'=>'array']);
+        $this->validate($request, ['items' => 'array']);
 
         $model = $this->getModelInstance($id);
 

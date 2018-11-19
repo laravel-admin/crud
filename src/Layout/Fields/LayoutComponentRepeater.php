@@ -4,10 +4,8 @@ namespace LaravelAdmin\Crud\Layout\Fields;
 
 use LaravelAdmin\Crud\Layout\Field;
 
-class LayoutRepeater extends Field
+class LayoutComponentRepeater extends Field
 {
-    public $items;
-
     public function __construct($content, array $config = [])
     {
         parent::__construct($content, $config);
@@ -21,19 +19,18 @@ class LayoutRepeater extends Field
             $this->content = [];
         }
 
-        $content = collect($this->content)->map(function ($record) {
-            return collect($this->config['children'])->mapWithKeys(function ($item) use ($record) {
-                if (empty($record[$item['id']])) {
+        $content = collect($this->content)->each(function ($record, $key) {
+            $fields = collect($this->config['children'][array_search($record['settings']['type'], array_column($this->config['children'], 'id'))]['fields'])->mapWithKeys(function ($item) use ($record) {
+                if (empty($record['content'][$item['id']])) {
                     $content = null;
                 } else {
-                    $content = $record[$item['id']];
+                    $content = $record['content'][$item['id']];
                 }
 
                 return [$item['id'] => $this->getFieldDriver($item, $content)];
             });
+            $this->content[$key]['content'] = $fields;
         });
-
-        return $this->items = $content;
     }
 
     protected function getFieldDriver(array $field, $content)

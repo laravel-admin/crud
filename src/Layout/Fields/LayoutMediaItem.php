@@ -9,7 +9,7 @@ class LayoutMediaItem extends Field
 {
     public $object;
 
-    public function __construct($content, array $config=[])
+    public function __construct($content, array $config = [])
     {
         parent::__construct($content, $config);
 

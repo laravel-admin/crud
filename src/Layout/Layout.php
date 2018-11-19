@@ -27,12 +27,13 @@
 // 	]
 // ];
 
-
 /*
 * Example config
 */
 
 // return [
+//
+//     'field' => 'layout',
 //
 //     'views' => 'layout.',
 //
@@ -66,6 +67,12 @@ use Illuminate\Database\Eloquent\Model;
 class Layout
 {
     /**
+     * The current field
+     * @var String
+     */
+    protected $field;
+
+    /**
      * The current post
      * @var Post
      */
@@ -88,8 +95,10 @@ class Layout
      * @param Model   $post
      * @param string $field
      */
-    public function __construct(Model $model, $field="layout")
+    public function __construct(Model $model, $field = 'layout')
     {
+        $this->field = $field;
+
         //	Save the post as an object variable
         $this->model = $model;
 
@@ -112,14 +121,14 @@ class Layout
         if (!empty($this->components)) {
             return $this->components;
         }
-        
+
         //	Create per component a path to the view
         return $this->components = $this->data->map(function ($item) {
             if (!empty($item['settings']['type']) && $config = $this->getConfigForComponent($item['settings']['type'])) {
                 return $this->getDriverForComponent($item, $config);
             }
             return null;
-        //	Filter out items, which have not a matching template partial
+            //	Filter out items, which have not a matching template partial
         })->filter(function ($item) {
             return !is_null($item);
         });
@@ -132,7 +141,7 @@ class Layout
     public function render()
     {
         return $this->components()->reduce(function ($carry, $item) {
-            return $carry.$item->render();
+            return $carry . $item->render();
         });
     }
 
@@ -143,7 +152,7 @@ class Layout
      */
     public function getConfigForComponent($id)
     {
-        return collect(config('layout.components'))->filter(function ($item) use ($id) {
+        return collect(config("{$this->field}.components"))->filter(function ($item) use ($id) {
             return !empty($item['id']) && $id == $item['id'];
         })->first();
     }

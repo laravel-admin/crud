@@ -32,11 +32,12 @@
 		//	Again load all field components
 		//	This doesn't work without doing this
 		components: {
+	        'layout-boolean': require('./Boolean.vue'),
+			'layout-date': require('./Date.vue'),
+	        'layout-media-item': require('./MediaItem.vue'),
+	        'layout-select': require('./Select.vue'),
 			'layout-text': require('./Text.vue'),
 	        'layout-textarea': require('./Textarea.vue'),
-	        'layout-boolean': require('./Boolean.vue'),
-	        'layout-select': require('./Select.vue'),
-	        'layout-media-item': require('./MediaItem.vue'),
 	        'layout-wysiwyg': require('./Wysiwyg.vue'),
 		},
 

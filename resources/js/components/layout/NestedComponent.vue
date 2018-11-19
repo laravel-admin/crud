@@ -10,10 +10,6 @@
 					Content
 				</button>
 
-				<button type="button" class="btn btn-default btn-xs" :class="{'active':view=='settings'}" @click.prevent="setView('settings')">
-					Settings
-				</button>
-
 				<div class="btn-group">
 					
 					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -32,19 +28,13 @@
 
 			</div>
 
-			<h3 class="panel-title">{{ data.settings.name }}</h3>
+			<h3 class="panel-title">{{ settings.name }}</h3>
 
         </div>
 
 		<div class="panel-body" v-show="view == 'content'">
 			<template v-for="field in settings.fields">
-				<component :is="field.type" :settings="field" :data="getDataForField(field.id)" :watcher_index="data.watcher_index" :index="index" @update="updateContentField"></component>
-			</template>
-		</div>
-
-		<div class="panel-body" v-show="view == 'settings'">
-			<template v-for="field in componentSettings">
-				<component :is="field.type" :settings="field" :data="data.settings[field.id]" :watcher_index="data.watcher_index" :index="index" @update="updateSettingsField"></component>
+				<component :is="field.type" :settings="field" :data="getDataForField(field.id)" :watcher_index="1" :index="index" @update="updateContentField"></component>
 			</template>
 		</div>
 
@@ -57,7 +47,6 @@
 		components: {
 	        'layout-boolean': require('./fields/Boolean.vue'),
 			'layout-date': require('./fields/Date.vue'),
-			'layout-component-repeater': require('./fields/ComponentRepeater.vue'),
 	        'layout-media-item': require('./fields/MediaItem.vue'),
 	        'layout-repeater': require('./fields/Repeater.vue'),
 	        'layout-select': require('./fields/Select.vue'),
@@ -67,19 +56,13 @@
 		},
 
 		//	Define the props, given from the layout component
-		props: ['components','data','settings','index','locale','length'],
+		props: ['data','settings','index','length', 'components'],
 
 		data()
 		{
 			return {
 				//	Current view
 				view:null,
-
-				//	The default settings for each component
-				componentSettings: [
-					{id:'name', name:'Name', type:'layout-text'},
-					{id:'active', name:'Active?', type:'layout-boolean'},
-				]
 			};
 		},
 
@@ -115,17 +98,6 @@
 			{
 				//	Broadcast an event to the layout to update the data in the original object
 				this.$emit('update', this.index, 'content', id, data);
-			},
-
-			/**
-			 * Update the value of the by id given settings field
-			 * @param string id
-			 * @param mixed data
-			 */
-			updateSettingsField(id, data)
-			{
-				//	Broadcast an event to the layout to update the data in the original object
-				this.$emit('update', this.index, 'settings', id, data);
 			}
 		}
     }

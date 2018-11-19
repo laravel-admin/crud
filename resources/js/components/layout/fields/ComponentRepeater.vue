@@ -6,45 +6,38 @@
 
 			<div class="panel-heading">
                 
-				<div class="btn-group pull-right" v-show="this.hastranslation=='true'">
+				<div class="btn-group pull-right">
                     
 					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Add <span class="caret"></span>
 					</button>
 
 					<ul class="dropdown-menu">
-						<li v-for="component in settings.components"><a href="#" class="" v-on:click.prevent="appendComponent(component)">{{ component.name }}</a></li>
+						<li v-for="component in settings.children"><a href="#" class="" v-on:click.prevent="appendComponent(component)">{{ component.name }}</a></li>
 					</ul>
 
                 </div>
 
-				<h3 class="panel-title">{{ this.language }} {{ this.title }}</h3>
+				<h3 class="panel-title">Component repeater</h3>
 
             </div>
 
-			<div class="panel-body" v-show="this.hastranslation=='false'">
-				
-				<p>Please use the content setup for the selected language first.</p>
+			<div class="panel-body">
 
-			</div>
-
-			<div class="panel-body" v-show="this.hastranslation=='true'">
-
-				<layout-component
+				<layout-nested-component
 					v-for="(component,key) in checkedData"
 					:key="key"
 					:index="key"
 					:data="component"
-					:locale="locale"
 					:length="checkedData.length"
-					:components="settings.components"
+					:components="settings.children"
 					:settings="getSettingsForComponent(component.settings.type)"
 					@update="updateComponent"
 					@append="appendComponent"
 					@delete="deleteComponent"
 					@moveup="moveComponentUp"
 					@movedown="moveComponentDown"
-				></layout-component>
+				></layout-nested-component>
 
 			</div>
 
@@ -55,50 +48,53 @@
 </template>
 
 <script>
-	import Event from '../../../../../base/resources/js/Event';
+
+	import Event from '../../../../../../base/resources/js/Event';
 
     export default {
 
 		components: {
-			'layout-component': require('./Component.vue'),
+			'layout-nested-component': require('../NestedComponent.vue'),
         },
 
-		props: ['title', 'layoutdata', 'layoutsettings', 'hastranslation', 'language', 'locale', 'controller'],
+		props: ['settings', 'data', 'index', 'watcher_index'], 
 
 		data()
 		{
 			let output = {
 				//	Initialise settings object, who will be filled by an ajax request
-				settings: this.layoutsettings,
+				repeater_settings: this.settings, 
 
 				//	The data of the current object
-				data: this.addWatcherIndexToLayoutData(),
+				repeater_data: this.addWatcherIndexToLayoutData(),
 			};
 
 			return output;
 		},
-
-        mounted() {
-            console.log('Layout component mounted.');
-        },
+		
+		mounted() {
+            console.log('ComponentRepeater component mounted.');
+		},
+		
+		updated() {
+			this.$emit('update', this.settings.id, (this.checkedData) ? this.checkedData : null, this.index);
+		},
 
 		computed: {
 
             checkedData()
             {
-                let output = this.data.filter(item => {
-                    if (typeof item.settings == 'undefined') {
+                return this.repeater_data.filter(item => {
+					if (typeof item.settings == 'undefined') {
                         return false;
 					}
-					
+
                     if (typeof item.settings.type == 'undefined') {
                         return false;
 					}
-					
-					return this.getSettingsForComponent(item.settings.type) ? true : false;
-				});
 
-				return output;
+					return this.getSettingsForComponent(item.settings.type) ? true : false;
+                });
             }
 
 		},
@@ -110,7 +106,7 @@
 			},
 
 			addWatcherIndexToLayoutData() {
-				let settings = this.layoutdata;
+				let settings = (this.data) ? this.data : [];
 				
 				settings.forEach((item, index) => {
 					settings[index].watcher_index = this.generateUniqueId(index);
@@ -130,13 +126,12 @@
 				let obj = {
 					settings: {
 						name: component.name,
-						active: true,
 						type: component.id,
 					},
 					watcher_index: this.generateUniqueId(this.checkedData.length)
 				};
 
-				this.data.push(obj);
+				this.repeater_data.push(obj);
 
 				// TODO: Append new component to the specified index
 
@@ -154,31 +149,31 @@
 			deleteComponent(index)
 			{
 				//	Delete the component with the given index of the array
-				this.data.splice(index,1);
+				this.repeater_data.splice(index,1);
 			},
 
 			moveComponentDown(index)
 			{
-				if (typeof this.data[index+1] == 'undefined') {
+				if (typeof this.repeater_data[index+1] == 'undefined') {
 					return;
 				}
 
-				let item = this.data[index];
+				let item = this.repeater_data[index];
 
-				this.data.splice(index,1);
-				this.data.splice(index+1, 0, item);
+				this.repeater_data.splice(index,1);
+				this.repeater_data.splice(index+1, 0, item);
 			},
 
 			moveComponentUp(index)
 			{
-				if (typeof this.data[index-1] == 'undefined') {
+				if (typeof this.repeater_data[index-1] == 'undefined') {
 					return;
 				}
 
-				let item = this.data[index];
+				let item = this.repeater_data[index];
 
-				this.data.splice(index,1);
-				this.data.splice(index-1, 0, item);
+				this.repeater_data.splice(index,1);
+				this.repeater_data.splice(index-1, 0, item);
 			},
 
 			/**
@@ -188,11 +183,11 @@
 			getSettingsForComponent(type)
 			{
 				//	Search in all defined componenttypes for the one with an id as type
-				for (let i in this.settings.components)
+				for (let i in this.repeater_settings.children)
 				{
-					if (this.settings.components[i].id == type)
+					if (this.repeater_settings.children[i].id == type)
 					{
-						return this.settings.components[i];
+						return this.repeater_settings.children[i];
 					}
 				}
 
@@ -210,44 +205,17 @@
 			updateComponent(index, section, field, data)
 			{
 				//	Does a component with the specified index exists?
-				if (typeof this.data[index] === 'undefined') this.data[index] = {};
+				if (typeof this.repeater_data[index] === 'undefined') this.repeater_data[index] = {};
 
 				//	Does the section (content or setttings) exists on the component
-				if (typeof this.data[index][section] === 'undefined') this.data[index][section] = {};
+				if (typeof this.repeater_data[index][section] === 'undefined') this.repeater_data[index][section] = {};
 				
 				//	Does the field exists on the component
-				if (typeof this.data[index][section][field] === 'undefined') this.data[index][section][field] = {};
+				if (typeof this.repeater_data[index][section][field] === 'undefined') this.repeater_data[index][section][field] = {};
 
 				//	Update the data of the field
-				this.data[index][section][field] = data;
+				this.repeater_data[index][section][field] = data;
 			},
-
-			save()
-			{
-                const notify = () => {
-                    Event.$emit('notification', {type: 'success', message: 'The layout is succesfully saved.'});
-                };
-				const flash_error = (data) => {
-					let message = data.message;
-					for (var key in data.errors) {
-						if (data.errors.hasOwnProperty(key)) {
-							message = data.errors[key].toString();
-							break;
-						}
-					}
-					Event.$emit('notification', {type: 'danger', message: message});
-				};
-				if (this.locale) {
-					axios.put(this.controller, {layout:this.checkedData}).then(notify).catch(error => {
-						flash_error(error.response.data);
-					});
-				}
-				else {
-					axios.post(this.controller, {layout:this.checkedData}).then(notify).catch(error => {
-						flash_error(error.response.data);
-					});
-				}
-			}
 		}
     }
 </script>

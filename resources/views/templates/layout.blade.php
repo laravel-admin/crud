@@ -72,11 +72,12 @@
 			@endif
 			
 				<layout
+					title="{{ $singular_name }}"
 					language="{{ $languages[$translation] }}" 
 					hastranslation="{{ $has_translation ? 'true' : 'false' }}" 
 					:locale="{{ $translation ? 'true' : 'false' }}"
 					controller="{{ URL::current() }}"
-					:layoutdata="{{ json_encode($model->layout ?: []) }}"
+					:layoutdata="{{ json_encode($model->$field ?: []) }}"
 					:layoutsettings="{{ json_encode($settings ?: []) }}" 
 					ref="layoutsetup"
 				></layout>
@@ -90,6 +91,5 @@
 </div>
 
 @stop
-
 
 @include('crud::templates.tinymce')

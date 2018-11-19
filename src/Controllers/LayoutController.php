@@ -11,40 +11,11 @@ class LayoutController extends Controller
 {
     use Crud, CanBeSecured;
 
-    /**
-     * Show the layout
-     * @param  int $page_id
-     * @return Response;
-     */
-    public function index(Request $request, $id)
+    protected $config;
+
+    public function __construct()
     {
-        $this->checkRole();
-
-        //	Get the model instance
-        $model = $this->getModelInstance($id);
-
-        if ($request->ajax()) {
-            return $model;
-        }
-
-        $settings = (new \LaravelAdmin\Crud\Layout\Config())->all();
-
-        $translation = null;
-        $foreign_key = null;
-
-        //	Render the view
-        return view('crud::templates.layout', $this->parseViewData(compact('model', 'settings', 'translation', 'foreign_key')));
-    }
-
-    /**
-     * Use the create method to return the available components
-     * @return Response
-     */
-    public function create()
-    {
-        $this->checkRole();
-
-        return (new \LaravelAdmin\Crud\Layout\Config())->all();
+        $this->config = (property_exists($this, 'layout_config')) ? $this->layout_config : 'layout';
     }
 
     /**
@@ -56,6 +27,8 @@ class LayoutController extends Controller
     {
         $this->checkRole();
 
+        $field = (config("{$this->config}.field")) ?: 'layout';
+
         //	Get the model instance
         $parent = $this->getModelInstance($id);
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
@@ -66,7 +39,7 @@ class LayoutController extends Controller
 
         if ($request->has('copy')) {
             if ($copyfrom = $this->getModelInstance($id)->translateOrNew($request->copy)) {
-                $model->fill(['layout' => $copyfrom->layout]);
+                $model->fill([$field => $copyfrom->$field]);
                 $model->save();
 
                 $this->flash('The layout is succesfully copied', 'success');
@@ -81,39 +54,10 @@ class LayoutController extends Controller
             return $model;
         }
 
-        $settings = (new \LaravelAdmin\Crud\Layout\Config())->all();
+        $settings = (new \LaravelAdmin\Crud\Layout\Config($this->config))->all();
 
         //	Render the view
-        return view('crud::templates.layout', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'settings', 'has_translation', 'translation', 'foreign_key')));
-    }
-
-    /**
-     * Store the layout
-     * @param  Request $request [description]
-     * @param  int  $page_id [description]
-     * @return Response
-     */
-    public function store(Request $request, $id)
-    {
-        $this->checkRole();
-
-        //	Validate the request with the specified validation rules and messages
-        $validation = $this->setupValidation(['layout' => 'array']);
-        $this->validate($request, $validation->rules, $validation->messages);
-
-        //	Get the model instance
-        $model = $this->getModelInstance($id);
-
-        $model->layout = $request->layout;
-        // Add user_id to payload
-        if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
-            $model->updated_by = \Auth::user()->id;
-        }
-        $model->save();
-
-        $this->flash('The layout is succesfully saved.', 'success');
-
-        return ['status' => 'success'];
+        return view('crud::templates.layout', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'field', 'settings', 'has_translation', 'translation', 'foreign_key')));
     }
 
     /**
@@ -126,14 +70,16 @@ class LayoutController extends Controller
     {
         $this->checkRole();
 
+        $field = (config("{$this->config}.field")) ?: 'layout';
+
         //	Validate the request with the specified validation rules and messages
-        $validation = $this->setupValidation(['layout' => 'array']);
+        $validation = $this->setupValidation(['layout' => []]);
         $this->validate($request, $validation['rules'], $validation['messages']);
 
         //	Get the model instance
         $model = $this->getModelInstance($id);
 
-        $payload = ['layout' => $request->layout];
+        $payload = [$field => $request->layout];
 
         // Add user_id to payload
         if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
@@ -151,7 +97,7 @@ class LayoutController extends Controller
     {
         $validation_rules = $default;
         $validation_messages = [];
-        $config = config('layout');
+        $config = config("{$this->config}");
         foreach ($config['components'] as $value) {
             foreach ($value['fields'] as $field) {
                 if ($field['type'] === 'layout-repeater') {
@@ -175,6 +121,29 @@ class LayoutController extends Controller
                             }
                         }
                     }
+                    // } elseif ($field['type'] === 'layout-component-repeater'){
+                //     foreach ($field['children'] as $child) {
+                //         foreach ($child['fields'] as $child_field) {
+                //             if (isset($child_field['validate_rule'])) {
+                //                 $validation_rules[] = [
+                //                     "layout.*.content.{$field['id']}.*.content.{$child_field['id']}" => $child_field['validate_rule']
+                //                 ];
+
+                //                 if (isset($child_field['validate_message'])) {
+                //                     foreach ($child_field['validate_message'] as $rule => $message) {
+                //                         $validation_messages[] = [
+                //                             "layout.*.content.{$field['id']}.*.content.{$child_field['id']}.{$rule}" => $message
+                //                         ];
+                //                     }
+                //                 } else {
+                //                     $name = strtolower($child_field['name']);
+                //                     $validation_messages[] = [
+                //                         "layout.*.content.{$field['id']}.*.content.{$child_field['id']}.required" => "The {$name} field is required."
+                //                     ];
+                //                 }
+                //             }
+                //         }
+                //     }
                 } elseif (isset($field['validate_rule'])) {
                     $validation_rules[] = [
                         "layout.*.content.{$field['id']}" => $field['validate_rule']
@@ -195,6 +164,11 @@ class LayoutController extends Controller
                 }
             }
         }
+
+        // dd([
+        //     'rules' => array_collapse($validation_rules),
+        //     'messages' => array_collapse($validation_messages)
+        // ]);
 
         return [
             'rules' => array_collapse($validation_rules),

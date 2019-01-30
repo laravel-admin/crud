@@ -229,6 +229,7 @@ trait Crud
         $data['submenu'] = $this->getSubmenu();
         $data['additional_submenu'] = $this->getAdditionalSubmenu();
 
+        $data['allow_search'] = (property_exists($this, 'allow_search')) ? $this->allow_search : true;
         $data['allow_create'] = (property_exists($this, 'allow_create')) ? $this->allow_create : true;
         $data['allow_delete'] = (property_exists($this, 'allow_delete')) ? $this->allow_delete : true;
 

@@ -11,12 +11,14 @@
 			<a class="list-group-item" href="{!! URL::route("{$route}index") !!}">All {!! $plural_name !!}</a>
 			@if($handle_bulk && !empty($submenu_bulk))
 				@foreach ($submenu_bulk as $item)
-					<a class="list-group-item" href="{!! URL::route("{$route}index") !!}?filter={{ $item['id'] }}&amp;set={{ $item['set'] }}">Filter: {{ $item['label_filter'] }}</a>
+					<a class="list-group-item{{ (app('request')->input('filter') == $item['id'] && app('request')->input('set') == $item['set']) ? ' active' : '' }}" href="{!! URL::route("{$route}index") !!}?filter={{ $item['id'] }}&amp;set={{ $item['set'] }}">Filter: {{ $item['label_filter'] }}</a>
 				@endforeach
 			@endif
         </div>
-    </div>
-
-    @include('crud::templates.index-search')
+	</div>
+	
+	@if($allow_search)
+		@include('crud::templates.index-search')
+	@endif
 
 </div>

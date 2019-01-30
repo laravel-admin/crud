@@ -227,6 +227,7 @@ trait Crud
         $data['parent_route'] = $this->getRouteName(2);
         $data['layout'] = $this->layout();
         $data['submenu'] = $this->getSubmenu();
+        $data['additional_submenu'] = $this->getAdditionalSubmenu();
 
         $data['allow_create'] = (property_exists($this, 'allow_create')) ? $this->allow_create : true;
         $data['allow_delete'] = (property_exists($this, 'allow_delete')) ? $this->allow_delete : true;
@@ -264,6 +265,39 @@ trait Crud
         }
         if (($action == 'edit' || $action == 'show') && method_exists($this, 'getSubmenuForEdit')) {
             return $this->getSubmenuForEdit();
+        }
+
+        return [];
+    }
+
+    /**
+     * Get additional submenu
+     *
+     * @return
+     */
+    protected function getAdditionalSubmenu()
+    {
+        // Check if we have different submenu
+        if (property_exists($this, 'additional_submenu')) {
+            $action = $this->additional_submenu;
+        } else {
+            $current_route = \Route::currentRouteName();
+
+            //	Make an array based on the dots in the route
+            $route_parts = explode('.', $current_route);
+
+            //	Remove the last item of the array (the action)
+            $action = array_pop($route_parts);
+        }
+
+        if ($action == 'index' && method_exists($this, 'getAdditionalSubmenuForList')) {
+            return $this->getAdditionalSubmenuForList();
+        }
+        if ($action == 'create' && method_exists($this, 'getAdditionalSubmenuForCreate')) {
+            return $this->getAdditionalSubmenuForCreate();
+        }
+        if (($action == 'edit' || $action == 'show') && method_exists($this, 'getAdditionalSubmenuForEdit')) {
+            return $this->getAdditionalSubmenuForEdit();
         }
 
         return [];

@@ -3,11 +3,11 @@
         <option value="{{ $child->id }}" {{ $field->current_id($model) == $child->id ? 'disabled="disabled"' : '' }} {{ $field->value($model) == $child->id ? 'selected="selected"' : '' }}>
             {{ $prefix.$child->name }}
         </option>
-        @if(count($child->childs))
-            @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' --> ', 'max_childs' => $max_childs, 'count' => $count+1, 'childs' => $child->childs])
+        @if($childs = $child->childs)
+            @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' --> ', 'max_childs' => $max_childs, 'count' => $count+1, 'childs' => $childs])
         @endif
-        @if(count($child->children))
-            @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' --> ', 'max_childs' => $max_childs, 'count' => $count+1, 'childs' => $child->children])
+        @if($childs = $child->children)
+            @include('crud::fields.select-parent-child-childs',['prefix' => $prefix . ' --> ', 'max_childs' => $max_childs, 'count' => $count+1, 'childs' => $childs])
         @endif
     @endforeach
 @endif

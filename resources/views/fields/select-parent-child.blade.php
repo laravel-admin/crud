@@ -6,11 +6,11 @@
                 <option value="{{ $option->id }}" {{ ($field->current_id($model) == $option->id && !empty($option->id)) ? 'disabled="disabled"' : '' }} {{ $field->value($model) == $option->id ? 'selected="selected"' : '' }}>
                     {{ $option->name }}
                 </option>
-                @if(count($option->childs))
-                    @include('crud::fields.select-parent-child-childs',['prefix' => ' --> ', 'max_childs' => $field->max_childs(), 'count' => 1, 'childs' => $option->childs])
+                @if($childs = $option->childs)
+                    @include('crud::fields.select-parent-child-childs',['prefix' => ' --> ', 'max_childs' => $field->max_childs(), 'count' => 1, 'childs' => $childs])
                 @endif
-                @if(count($option->children))
-                    @include('crud::fields.select-parent-child-childs',['prefix' => ' --> ', 'max_childs' => $field->max_childs(), 'count' => 1, 'childs' => $option->children])
+                @if($childs = $option->children)
+                    @include('crud::fields.select-parent-child-childs',['prefix' => ' --> ', 'max_childs' => $field->max_childs(), 'count' => 1, 'childs' => $childs])
                 @endif
             @endforeach
         </select>

@@ -37,14 +37,14 @@
         </div>
 
 		<div class="panel-body" v-show="view == 'content'">
-			<template v-for="field in settings.fields">
-				<component :is="field.type" :settings="field" :data="getDataForField(field.id)" :watcher_index="data.watcher_index" :index="index" @update="updateContentField"></component>
+			<template v-for="(field, key) in settings.fields">
+				<component :is="field.type" :settings="field" :data="getDataForField(field.id)" :watcher_index="data.watcher_index" :key="generateUniqueId('content', key)" :index="index" @update="updateContentField"></component>
 			</template>
 		</div>
 
 		<div class="panel-body" v-show="view == 'settings'">
-			<template v-for="field in componentSettings">
-				<component :is="field.type" :settings="field" :data="data.settings[field.id]" :watcher_index="data.watcher_index" :index="index" @update="updateSettingsField"></component>
+			<template v-for="(field, key) in componentSettings">
+				<component :is="field.type" :settings="field" :data="data.settings[field.id]" :watcher_index="data.watcher_index" :key="generateUniqueId('setting', key)" :index="index" @update="updateSettingsField"></component>
 			</template>
 		</div>
 
@@ -84,6 +84,14 @@
 		},
 
 		methods: {
+			/**
+			 * Create component unique id
+			 * @param string type
+			 * @param int key
+			 */
+			generateUniqueId(type, key){
+				return type + key + this.data.watcher_index;
+			},
 
 			/**
 			 * Toggle the view of a component between content, settings and blank

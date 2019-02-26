@@ -51,6 +51,11 @@ class Component
         return View::make($this->getView(), $this->getContent()->toArray());
     }
 
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
     public function getContent()
     {
         if (empty($this->component['content'])) {

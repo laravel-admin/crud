@@ -12,8 +12,9 @@ class Component
 
     protected $config;
 
-    public function __construct(Model $model, array $component, array $config = null)
+    public function __construct(String $field, Model $model, array $component, array $config = null)
     {
+        $this->field = $field;
         $this->model = $model;
         $this->component = collect($component);
         $this->config = $config;
@@ -26,7 +27,7 @@ class Component
 
     public function getView()
     {
-        return config('layout.views') . $this->component['settings']['type'];
+        return config("{$this->field}.views") . $this->component['settings']['type'];
     }
 
     public function viewExists()

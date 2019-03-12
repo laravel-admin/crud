@@ -173,6 +173,6 @@ class Layout
             return null;
         }
 
-        return new $config['driver']($this->model, $component, $config);
+        return new $config['driver']($this->field, $this->model, $component, $config);
     }
 }

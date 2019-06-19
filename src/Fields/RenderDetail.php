@@ -2,8 +2,6 @@
 
 namespace LaravelAdmin\Crud\Fields;
 
-use Illuminate\Support\Facades\View;
-
 /**
  * Render the fields of a CRUD model for the create and edit form
  */

@@ -18,24 +18,22 @@ return [
 
     'views' => 'layout.',
 
-    'components'    =>    [
-
+    'components' => [
         [
-            'id'        =>    'basic-text',
-            'name'      =>    'Basic text',
-            'driver'    =>    null,
-            'fields'=>    [
+            'id' => 'basic-text',
+            'name' => 'Basic text',
+            'driver' => null,
+            'fields' => [
                 [
-                    'id'=>'title',
+                    'id' => 'title',
                     'name' => 'Title',
                     'type' => 'layout-text'
                 ],
                 [
-                    'id' =>'content',
+                    'id' => 'content',
                     'name' => 'Content',
                     'type' => 'layout-wysiwyg'],
             ]
         ]
     ]
-
 ];

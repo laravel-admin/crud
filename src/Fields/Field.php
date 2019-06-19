@@ -32,7 +32,7 @@ abstract class Field
         //	Convention of the view is that it wil be stored in the fields folder
         //	of the CRUD views. The name of the view has to be the snake cased
         //	version of the class name
-        $view_path = (property_exists($this, 'view_path') ? $this->view_path : "crud::fields." . str_replace('_', '-', snake_case(class_basename(get_class($this)))));
+        $view_path = (property_exists($this, 'view_path') ? $this->view_path : 'crud::fields.' . str_replace('_', '-', snake_case(class_basename(get_class($this)))));
 
         //	Does the view exists
         if (!View::exists($view_path)) {
@@ -83,7 +83,7 @@ abstract class Field
 
         //	If a formatter is defined, the attribute or accesor in the model will be returned
         if (is_string($this->config['formatter'])) {
-            $prop =  $this->config['formatter'];
+            $prop = $this->config['formatter'];
             return $model->$prop;
         }
 

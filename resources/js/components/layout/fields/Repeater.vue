@@ -1,146 +1,155 @@
 <template>
-	<div class="form-group">
-		<label :for="settings.id" class="col-sm-3 control-label">{{ settings.name }}</label>
-		<div class="col-sm-9">
-			<!-- Create a panel for each iteration of the repeater -->
-			<div class="panel panel-default" v-for="(item, key) in content">
-				<div class="panel-body">
-					<!-- Load for each child within the settings the specific component -->
-					<template v-for="field in settings.children">
-						<component :is="field.type" :index="key" :settings="field" :data="getDataForChild(key, field.id)" @update="updateChild"></component>
-					</template>
-					<hr />
-				</div>
-				<!-- Action for each item -->
-				<div class="panel-footer">
-					<button class="btn btn-primary" @click.prevent="addItem(key, 'below')">Add</button>
-					<button class="btn btn-danger" @click.prevent="deleteItem(key)">Delete</button>
-					<button v-if="key" class="btn btn-default" @click.prevent="moveItemUp(key)">Move up</button>
-					<button v-if="key < repeaterLength-1" class="btn btn-default" @click.prevent="moveItemDown(key)">Move down</button>
-				</div>
-			</div>
+  <div class="form-group">
+    <label :for="settings.id" class="col-sm-3 control-label">{{ settings.name }}</label>
+    <div class="col-sm-9">
+      <!-- Create a panel for each iteration of the repeater -->
+      <div class="panel panel-default" v-for="(item, key) in content">
+        <div class="panel-body">
+          <!-- Load for each child within the settings the specific component -->
+          <template v-for="field in settings.children">
+            <component
+              :is="field.type"
+              :index="key"
+              :settings="field"
+              :data="getDataForChild(key, field.id)"
+              @update="updateChild"
+            ></component>
+          </template>
+          <hr>
+        </div>
+        <!-- Action for each item -->
+        <div class="panel-footer">
+          <button class="btn btn-primary" @click.prevent="addItem(key, 'below')">Add</button>
+          <button class="btn btn-danger" @click.prevent="deleteItem(key)">Delete</button>
+          <button v-if="key" class="btn btn-default" @click.prevent="moveItemUp(key)">Move up</button>
+          <button
+            v-if="key < repeaterLength-1"
+            class="btn btn-default"
+            @click.prevent="moveItemDown(key)"
+          >Move down</button>
+        </div>
+      </div>
 
-			<!-- If no items avaliable just show an add item button -->
-			<button class="btn btn-primary" @click.prevent="addItem" v-if="!content.length">Add item</button>
-		</div>
-	</div>
+      <!-- If no items avaliable just show an add item button -->
+      <button class="btn btn-primary" @click.prevent="addItem" v-if="!content.length">Add item</button>
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
+import FieldBoolean from './Boolean.vue';
+import FieldDate from './Date.vue';
+import FieldMediaItem from './MediaItem.vue';
+import FieldSelect from './Select.vue';
+import FieldText from './Text.vue';
+import FieldTextarea from './Textarea.vue';
+import FieldWysiwyg from './Wysiwyg.vue';
 
-		//	Again load all field components
-		//	This doesn't work without doing this
-		components: {
-	        'layout-boolean': require('./Boolean.vue'),
-			'layout-date': require('./Date.vue'),
-	        'layout-media-item': require('./MediaItem.vue'),
-	        'layout-select': require('./Select.vue'),
-			'layout-text': require('./Text.vue'),
-	        'layout-textarea': require('./Textarea.vue'),
-	        'layout-wysiwyg': require('./Wysiwyg.vue'),
-		},
+export default {
+    //	Again load all field components
+    //	This doesn't work without doing this
+    components: {
+        'layout-boolean': FieldBoolean,
+        'layout-date': FieldDate,
+        'layout-media-item': FieldMediaItem,
+        'layout-select': FieldSelect,
+        'layout-text': FieldText,
+        'layout-textarea': FieldTextarea,
+        'layout-wysiwyg': FieldWysiwyg,
+    },
 
-		//	The props to accept
-		props: ['settings','data'],
+    //	The props to accept
+    props: ['settings', 'data'],
 
-		//	Return data, content is default array
-		data() {
-			return {content:[]};
-		},
+    //	Return data, content is default array
+    data() {
+        return { content: [] };
+    },
 
-		mounted() {
-			//	If prop with data is filled, connent this with the content data property
-			//	We will work with the data instead of the prop in this component
-			if (this.data) {
-				this.content = this.data;
-			}
-		},
+    mounted() {
+        //	If prop with data is filled, connent this with the content data property
+        //	We will work with the data instead of the prop in this component
+        if (this.data) {
+            this.content = this.data;
+        }
+    },
 
-		computed: {
+    computed: {
+        //	Get the amount of items
+        repeaterLength() {
+            if (!this.data) {
+                return 1;
+            }
 
-			//	Get the amount of items
-			repeaterLength() {
-				if (!this.data) {
-					return 1;
-				}
+            return this.data.length;
+        },
+    },
 
-				return this.data.length;
-			}
-		},
+    methods: {
+        //	Pass the data for each field
+        getDataForChild(index, id) {
+            if (typeof this.content[index][id] === 'undefined') return null;
 
-		methods: {
+            return this.content[index][id];
+        },
 
-			//	Pass the data for each field
-			getDataForChild(index, id)
-			{
-				if (typeof this.content[index][id] === 'undefined') return null;
+        //	Event for updating a single value
+        updateChild(id, value, index) {
+            this.content[index][id] = value;
 
-				return this.content[index][id];
-			},
+            //	Emit to the parent component
+            this.$emit('update', this.settings.id, this.content);
+        },
 
-			//	Event for updating a single value
-			updateChild(id, value, index)
-			{
-				this.content[index][id] = value;
+        // 	Add item to the repeater
+        addItem(index) {
+            //	Fill the new item with all avaiable properties
+            let item = {};
+            for (let i in this.settings.children) {
+                item[this.settings.children[i].id] = null;
+            }
 
-				//	Emit to the parent component
-				this.$emit('update', this.settings.id, this.content);
-			},
+            //	If no current index defined, add the component at the bottom
+            if (typeof index === 'undefined') {
+                this.content.push(item);
+                return;
+            }
 
-			// 	Add item to the repeater
-			addItem(index)
-			{
-				//	Fill the new item with all avaiable properties
-				let item = {};
-				for (let i in this.settings.children) {
-					item[this.settings.children[i].id] = null;
-				}
+            //	Add the the item after the current index
+            this.content.splice(index + 1, 0, item);
+        },
 
-				//	If no current index defined, add the component at the bottom
-				if (typeof index === 'undefined') {
-					this.content.push(item);
-					return;
-				}
+        //	Delete item
+        deleteItem(index) {
+            //	Delete the component with the given index of the array
+            this.content.splice(index, 1);
 
-				//	Add the the item after the current index
-				this.content.splice(index+1, 0, item);
-			},
+            this.$emit('update', this.settings.id, this.content);
+        },
 
-			//	Delete item
-			deleteItem(index)
-			{
-				//	Delete the component with the given index of the array
-				this.content.splice(index,1);
+        //	Move item one position down
+        moveItemDown(index) {
+            if (typeof this.content[index + 1] == 'undefined') {
+                return;
+            }
 
-				this.$emit('update', this.settings.id, this.content);
-			},
+            let item = this.content[index];
 
-			//	Move item one position down
-			moveItemDown(index)
-			{
-				if (typeof this.content[index+1] == 'undefined') {
-					return;
-				}
+            this.content.splice(index, 1);
+            this.content.splice(index + 1, 0, item);
+        },
 
-				let item = this.content[index];
+        //	Move item one position up
+        moveItemUp(index) {
+            if (typeof this.content[index - 1] == 'undefined') {
+                return;
+            }
 
-				this.content.splice(index,1);
-				this.content.splice(index+1, 0, item);
-			},
+            let item = this.content[index];
 
-			//	Move item one position up
-			moveItemUp(index)
-			{
-				if (typeof this.content[index-1] == 'undefined') {
-					return;
-				}
-
-				let item = this.content[index];
-
-				this.content.splice(index,1);
-				this.content.splice(index-1, 0, item);
-			}
-		}
-    }
+            this.content.splice(index, 1);
+            this.content.splice(index - 1, 0, item);
+        },
+    },
+};
 </script>

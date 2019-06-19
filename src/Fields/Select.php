@@ -7,7 +7,6 @@ namespace LaravelAdmin\Crud\Fields;
  */
 class Select extends Field
 {
-
     /**
      * Get the available options for the selectbox
      * @param  Model $model

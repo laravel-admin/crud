@@ -156,7 +156,8 @@ php artisan vendor:publish --provider="LaravelAdmin\Crud\CrudServiceProvider::cl
 Add the Layout vue component to your view instance
 
 ```
-Vue.component('layout', require('../../../../vendor/laravel-admin/crud/resources/js/components/layout/Layout.vue'));
+import layout from '../../../vendor/laravel-admin/crud/resources/js/components/layout/Layout.vue';
+Vue.component('layout', layout);
 ```
 
 ##	Build your components

@@ -62,7 +62,7 @@ class RenderList
             $params['order'] = 'asc';
         }
 
-        return '?'.http_build_query($params);
+        return '?' . http_build_query($params);
     }
 
     /**
@@ -81,7 +81,7 @@ class RenderList
 
         //	Is the formatter a string
         if (is_string($field['formatter'])) {
-            $prop =  $field['formatter'];
+            $prop = $field['formatter'];
             return $model->$prop;
         }
 

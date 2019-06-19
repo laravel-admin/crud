@@ -14,12 +14,12 @@ class CrudServiceProvider extends ServiceProvider
     public function boot()
     {
         //	Enable to load views with the specified prefix from the package
-         $this->loadViewsFrom(__DIR__.'/../resources/views', 'crud');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'crud');
 
-         // Publish the config
+        // Publish the config
         $this->publishes([__DIR__ . '/../resources/config/layout.php' => config_path('layout.php')], 'admin-config');
 
-         // Load config file
+        // Load config file
         $this->mergeConfigFrom(__DIR__ . '/../resources/config/layout.php', 'layout');
     }
 

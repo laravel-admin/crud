@@ -4,10 +4,22 @@
     "type": "laravel-package",
     "license": "MIT",
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "php": "^7.0"
+    },
     "autoload": {
         "psr-4": {
             "LaravelAdmin\\Crud\\": "src"
         }
-    }
+    },
+    "authors": [
+        {
+            "name": "Marco boom",
+            "email": "info@marcoboom.nl"
+        },
+        {
+            "name": "Bas de Beer",
+            "email": "bas.de.beer@in10.nl"
+        }
+    ]
 }

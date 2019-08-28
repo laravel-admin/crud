@@ -166,7 +166,7 @@ abstract class ResourceController extends Controller
     /**
     * Delete the model instance
     * @param  int $id
-    * @return Illuminate\Http\Response
+    * @return \Illuminate\Http\Response
     */
     public function destroy($id)
     {

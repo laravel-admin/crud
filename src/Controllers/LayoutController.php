@@ -4,12 +4,16 @@ namespace LaravelAdmin\Crud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use LaravelAdmin\Crud\Layout\Config;
 use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
 
 class LayoutController extends Controller
 {
-    use Crud, CanBeSecured;
+    use Crud;
+    use CanBeSecured;
 
     protected $config;
 
@@ -20,10 +24,10 @@ class LayoutController extends Controller
 
     /**
      * Show the layout
-     * @param  int $page_id
-     * @return Response;
+     *
+     * @return mixed;
      */
-    public function show(Request $request, $id, $translation)
+    public function show(Request $request, int $id, string $translation)
     {
         $this->checkRole();
 
@@ -54,19 +58,15 @@ class LayoutController extends Controller
             return $model;
         }
 
-        $settings = (new \LaravelAdmin\Crud\Layout\Config($this->config))->all();
+        $settings = (new Config($this->config))->all();
 
-        //	Render the view
         return view('crud::templates.layout', $this->parseViewData(compact('select_parent_name', 'parent_name', 'model', 'field', 'settings', 'has_translation', 'translation', 'foreign_key')));
     }
 
     /**
      * Store the layout
-     * @param  Request $request [description]
-     * @param  int  $page_id [description]
-     * @return Response
      */
-    public function update(Request $request, $id, $translation)
+    public function update(Request $request, int $id, string $translation): array
     {
         $this->checkRole();
 
@@ -81,10 +81,10 @@ class LayoutController extends Controller
 
         $payload = [$field => $request->layout];
 
-        // Add user_id to payload
-        if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
-            $payload['updated_by'] = \Auth::user()->id;
+        if (Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
+            $payload['updated_by'] = Auth::user()->id;
         }
+
         $model->translateOrNew($translation)->fill($payload);
         $model->save();
 

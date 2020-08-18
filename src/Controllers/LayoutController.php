@@ -16,10 +16,12 @@ class LayoutController extends Controller
     use CanBeSecured;
 
     protected $config;
+    protected $layout_model;
 
     public function __construct()
     {
         $this->config = (property_exists($this, 'layout_config')) ? $this->layout_config : 'layout';
+        $this->layout_model = config("{$this->config}.model");
     }
 
     /**

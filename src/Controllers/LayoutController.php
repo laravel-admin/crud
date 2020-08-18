@@ -56,6 +56,19 @@ class LayoutController extends Controller
 
         $model->$foreign_key = $id;
 
+        if ($this->layout_model) {
+            $widgets = $this->layout_model::where('locale', $translation)->where('artwork_id', $id)->orderBy('order_id')->get();
+            $layout = [];
+            foreach ($widgets as $widget) {
+                $layout[] = [
+                    'widget_id' => $widget->id,
+                    'settings' => json_decode($widget->settings),
+                    'content' => json_decode($widget->content),
+                ];
+            }
+            $model->$field = $layout;
+        }
+
         if ($request->ajax()) {
             return $model;
         }

@@ -45,8 +45,23 @@ class LayoutController extends Controller
 
         if ($request->has('copy')) {
             if ($copyfrom = $this->getModelInstance($id)->translateOrNew($request->copy)) {
-                $model->fill([$field => $copyfrom->$field]);
-                $model->save();
+                if ($this->layout_model) {
+                    $this->layout_model::where('locale', $translation)->where('artwork_id', $id)->delete();
+                    $widgets = $this->layout_model::where('locale', $request->copy)->where('artwork_id', $id)->get();
+                    foreach ($widgets as $widget) {
+                        $copy = new $this->layout_model();
+                        $copy->artwork_id = $id;
+                        $copy->order_id = $widget->order_id;
+                        $copy->locale = $translation;
+                        $copy->settings = $widget->settings;
+                        $copy->content = $widget->content;
+                        $copy->updated_by = Auth::user()->id;
+                        $copy->save();
+                    }
+                } else {
+                    $model->fill([$field => $copyfrom->$field]);
+                    $model->save();
+                }
 
                 $this->flash('The layout is succesfully copied', 'success');
 

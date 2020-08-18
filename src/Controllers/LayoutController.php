@@ -109,14 +109,29 @@ class LayoutController extends Controller
         //	Get the model instance
         $model = $this->getModelInstance($id);
 
-        $payload = [$field => $request->layout];
+        if ($this->layout_model) {
+            $this->layout_model::where('locale', $translation)->where('artwork_id', $model->id)->delete();
+            $order = 0;
+            foreach ($request->layout as $layout) {
+                $widget = new $this->layout_model();
+                $widget->artwork_id = $model->id;
+                $widget->order_id = $order++;
+                $widget->locale = $translation;
+                $widget->settings = json_encode($layout['settings']);
+                $widget->content = json_encode($layout['content']);
+                $widget->updated_by = Auth::user()->id;
+                $widget->save();
+            }
+        } else {
+            $payload = [$field => $request->layout];
 
-        if (Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
-            $payload['updated_by'] = Auth::user()->id;
+            if (Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
+                $payload['updated_by'] = Auth::user()->id;
+            }
+
+            $model->translateOrNew($translation)->fill($payload);
+            $model->save();
         }
-
-        $model->translateOrNew($translation)->fill($payload);
-        $model->save();
 
         $this->flash('The layout is succesfully saved.', 'success');
 

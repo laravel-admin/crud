@@ -130,7 +130,12 @@ class Layout
 
         //	Create per component a path to the view
         return $this->components = $this->data->map(function ($item) {
-            if (!empty($item['settings']['type']) && $config = $this->getConfigForComponent($item['settings']['type'])) {
+            if (isset($item['model'])) {
+                $settings = json_decode($item['model']->settings, true);
+                if (!empty($settings['type']) && $config = $this->getConfigForComponent($settings['type'])) {
+                    return $this->getDriverForComponent($item, $config);
+                }
+            } elseif (!empty($item['settings']['type']) && $config = $this->getConfigForComponent($item['settings']['type'])) {
                 return $this->getDriverForComponent($item, $config);
             }
 

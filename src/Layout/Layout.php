@@ -113,6 +113,16 @@ class Layout
 
     protected function getFieldData($field)
     {
+        if ($layout_model = config("{$field}.model")) {
+            $id = ($this->model->translation) ? $this->model->translation->id : $this->model->id;
+
+            return $layout_model::where('parent_id', $id)->orderBy('order_id')->get()->map(function ($component) {
+                return [
+                    'model' => $component,
+                ];
+            });
+        }
+
         //  Todo: Cache it
         return collect($this->model->$field);
     }

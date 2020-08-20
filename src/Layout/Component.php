@@ -27,6 +27,11 @@ class Component
         return !empty($this->settings['active']);
     }
 
+    public function getComponentModel()
+    {
+        return ($this->component['model']) ?: null;
+    }
+
     public function getView()
     {
         return config("{$this->field}.views") . $this->settings['type'];

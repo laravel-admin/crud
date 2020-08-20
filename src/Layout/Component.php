@@ -42,6 +42,11 @@ class Component
         return View::exists($this->getView());
     }
 
+    public function getResource()
+    {
+        return config("{$this->field}.resources") . studly_case($this->settings['type']);
+    }
+
     /**
      * Render component and return as HTML
      *

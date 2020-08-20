@@ -68,31 +68,36 @@ class Layout
 {
     /**
      * The current field
-     * @var String
+     *
+     * @var string
      */
     protected $field;
 
     /**
      * The current post
+     *
      * @var Post
      */
     protected $model;
 
     /**
      * The ACF Field
+     *
      * @var Collection
      */
     protected $data;
 
     /**
      * The components will be saved
+     *
      * @var Collection
      */
     protected $components;
 
     /**
      * Initializing the Flex library
-     * @param Model   $post
+     *
+     * @param Model  $post
      * @param string $field
      */
     public function __construct(Model $model, $field = 'layout')
@@ -114,6 +119,7 @@ class Layout
 
     /**
      * Check all components
+     *
      * @return Collection
      */
     public function components()
@@ -127,6 +133,7 @@ class Layout
             if (!empty($item['settings']['type']) && $config = $this->getConfigForComponent($item['settings']['type'])) {
                 return $this->getDriverForComponent($item, $config);
             }
+
             return null;
             //	Filter out items, which have not a matching template partial
         })->filter(function ($item) {
@@ -136,6 +143,7 @@ class Layout
 
     /**
      * Render all components
+     *
      * @return string
      */
     public function render()
@@ -147,7 +155,9 @@ class Layout
 
     /**
      * Get the config from layout.components for the specific component
-     * @param  string $id
+     *
+     * @param string $id
+     *
      * @return Collection
      */
     public function getConfigForComponent($id)
@@ -159,8 +169,10 @@ class Layout
 
     /**
      * Get the driver class for the specific component
-     * @param  array $field
-     * @param  array $config
+     *
+     * @param array $field
+     * @param array $config
+     *
      * @return Basic
      */
     public function getDriverForComponent($component, $config)

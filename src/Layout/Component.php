@@ -2,8 +2,8 @@
 
 namespace LaravelAdmin\Crud\Layout;
 
-use View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\View\View;
 
 class Component
 {
@@ -11,23 +11,25 @@ class Component
     protected $model;
 
     protected $config;
+    protected $settings;
 
-    public function __construct(String $field, Model $model, array $component, array $config = null)
+    public function __construct(string $field, Model $model, array $component, array $config = null)
     {
         $this->field = $field;
         $this->model = $model;
         $this->component = collect($component);
+        $this->settings = isset($this->component['model']) ? json_decode($this->component['model']->settings, true) : $this->component['settings'];
         $this->config = $config;
     }
 
     public function isActive()
     {
-        return !empty($this->component['settings']['active']);
+        return !empty($this->settings['active']);
     }
 
     public function getView()
     {
-        return config("{$this->field}.views") . $this->component['settings']['type'];
+        return config("{$this->field}.views") . $this->settings['type'];
     }
 
     public function viewExists()
@@ -37,6 +39,7 @@ class Component
 
     /**
      * Render component and return as HTML
+     *
      * @return string
      */
     public function render()
@@ -57,17 +60,24 @@ class Component
         return $this->config;
     }
 
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
     public function getContent()
     {
-        if (empty($this->component['content'])) {
-            $this->component['content'] = [];
+        if (isset($this->component['model'])) {
+            $component_content = json_decode($this->component['model']->content, true);
+        } else {
+            $component_content = $this->component['content'];
         }
 
-        $content = collect($this->config['fields'])->mapWithKeys(function ($item) {
-            if (empty($this->component['content'][$item['id']])) {
+        $content = collect($this->config['fields'])->mapWithKeys(function ($item) use ($component_content) {
+            if (empty($component_content[$item['id']])) {
                 $content = null;
             } else {
-                $content = $this->component['content'][$item['id']];
+                $content = $component_content[$item['id']];
             }
 
             return [$item['id'] => $this->getFieldDriver($item, $content)];

@@ -46,15 +46,14 @@ class LayoutController extends Controller
         if ($request->has('copy')) {
             if ($copyfrom = $this->getModelInstance($id)->translateOrNew($request->copy)) {
                 if ($this->layout_model) {
-                    $this->layout_model::where('locale', $translation)->where('artwork_id', $id)->delete();
-                    $widgets = $this->layout_model::where('locale', $request->copy)->where('artwork_id', $id)->get();
-                    foreach ($widgets as $widget) {
+                    $this->layout_model::where('parent_id', $model->id)->delete();
+                    $components = $this->layout_model::where('parent_id', $copyfrom->id)->get();
+                    foreach ($components as $component) {
                         $copy = new $this->layout_model();
-                        $copy->artwork_id = $id;
-                        $copy->order_id = $widget->order_id;
-                        $copy->locale = $translation;
-                        $copy->settings = $widget->settings;
-                        $copy->content = $widget->content;
+                        $copy->parent_id = $model->id;
+                        $copy->order_id = $component->order_id;
+                        $copy->settings = $component->settings;
+                        $copy->content = $component->content;
                         $copy->updated_by = Auth::user()->id;
                         $copy->save();
                     }
@@ -72,16 +71,14 @@ class LayoutController extends Controller
         $model->$foreign_key = $id;
 
         if ($this->layout_model) {
-            $widgets = $this->layout_model::where('locale', $translation)->where('artwork_id', $id)->orderBy('order_id')->get();
-            $layout = [];
-            foreach ($widgets as $widget) {
-                $layout[] = [
-                    'widget_id' => $widget->id,
-                    'settings' => json_decode($widget->settings),
-                    'content' => json_decode($widget->content),
+            $components = $this->layout_model::where('parent_id', $model->id)->orderBy('order_id')->get()->map(function ($component) {
+                return [
+                    'settings' => json_decode($component->settings, true),
+                    'content' => json_decode($component->content, true),
                 ];
-            }
-            $model->$field = $layout;
+            });
+
+            $model->$field = $components;
         }
 
         if ($request->ajax()) {
@@ -107,20 +104,20 @@ class LayoutController extends Controller
         $this->validate($request, $validation['rules'], $validation['messages']);
 
         //	Get the model instance
-        $model = $this->getModelInstance($id);
+        $parent = $this->getModelInstance($id);
+        $model = $parent->translateOrNew($translation);
 
         if ($this->layout_model) {
-            $this->layout_model::where('locale', $translation)->where('artwork_id', $model->id)->delete();
+            $this->layout_model::where('parent_id', $model->id)->delete();
             $order = 0;
             foreach ($request->layout as $layout) {
-                $widget = new $this->layout_model();
-                $widget->artwork_id = $model->id;
-                $widget->order_id = $order++;
-                $widget->locale = $translation;
-                $widget->settings = json_encode($layout['settings']);
-                $widget->content = json_encode($layout['content']);
-                $widget->updated_by = Auth::user()->id;
-                $widget->save();
+                $component = new $this->layout_model();
+                $component->parent_id = $model->id;
+                $component->order_id = $order++;
+                $component->settings = json_encode($layout['settings']);
+                $component->content = json_encode($layout['content']);
+                $component->updated_by = Auth::user()->id;
+                $component->save();
             }
         } else {
             $payload = [$field => $request->layout];
@@ -129,7 +126,7 @@ class LayoutController extends Controller
                 $payload['updated_by'] = Auth::user()->id;
             }
 
-            $model->translateOrNew($translation)->fill($payload);
+            $model->fill($payload);
             $model->save();
         }
 

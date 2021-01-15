@@ -17,7 +17,10 @@ class CrudServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'crud');
 
         // Publish the config
-        $this->publishes([__DIR__ . '/../resources/config/layout.php' => config_path('layout.php')], 'admin-config');
+        $this->publishes([
+            __DIR__ . '/../resources/config/layout.php' => config_path('layout.php'),
+            __DIR__ . '/../resources/config/tiny_editor.php' => config_path('tiny_editor.php')
+        ], 'admin-config');
 
         // Load config file
         $this->mergeConfigFrom(__DIR__ . '/../resources/config/layout.php', 'layout');
@@ -30,6 +33,5 @@ class CrudServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 }

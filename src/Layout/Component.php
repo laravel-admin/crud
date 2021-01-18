@@ -3,6 +3,7 @@
 namespace LaravelAdmin\Crud\Layout;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class Component
@@ -44,7 +45,7 @@ class Component
 
     public function getResource()
     {
-        return config("{$this->field}.resources") . studly_case($this->settings['type']);
+        return config("{$this->field}.resources") . Str::studly($this->settings['type']);
     }
 
     /**
@@ -107,7 +108,7 @@ class Component
         }
 
         if (!empty($field['type'])) {
-            $driverOptions[] = $namespace . studly_case($field['type']);
+            $driverOptions[] = $namespace . Str::studly($field['type']);
         }
 
         $driverOptions[] = Field::class;

@@ -2,6 +2,8 @@
 
 namespace LaravelAdmin\Crud\Fields;
 
+use Illuminate\Support\Str;
+
 /**
  * Render the fields of a CRUD model for the create and edit form
  */
@@ -12,7 +14,6 @@ class RenderDetail
 
     /**
      * Send an array with the config of all fields to show
-     * @param array $fields
      */
     public function __construct(array $fields)
     {
@@ -21,6 +22,7 @@ class RenderDetail
 
     /**
      * Return all values of a model instance
+     *
      * @return \Illuminate\Support\Collection
      */
     public function values()
@@ -32,8 +34,7 @@ class RenderDetail
 
             // Check if we got a string or class
             if (!class_exists($class)) {
-                //$class = $this->namespace . camel_case($class);
-                $class = $this->namespace . studly_case($class);
+                $class = $this->namespace . Str::studly($class);
             }
 
             // Check if class exists

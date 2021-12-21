@@ -2,6 +2,7 @@
 
 namespace LaravelAdmin\Crud\Layout\Fields;
 
+use Illuminate\Support\Str;
 use LaravelAdmin\Crud\Layout\Field;
 
 class LayoutRepeater extends Field
@@ -47,7 +48,7 @@ class LayoutRepeater extends Field
         }
 
         if (!empty($field['type'])) {
-            $driverOptions[] = $namespace . studly_case($field['type']);
+            $driverOptions[] = $namespace . Str::studly($field['type']);
         }
 
         $driverOptions[] = Field::class;

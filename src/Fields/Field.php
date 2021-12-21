@@ -3,6 +3,7 @@
 namespace LaravelAdmin\Crud\Fields;
 
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 
 /**
  * Class with all shared methods for the fields
@@ -16,7 +17,6 @@ abstract class Field
 
     /**
      * Dave the config as an object property
-     * @param array $config
      */
     public function __construct(array $config)
     {
@@ -25,6 +25,7 @@ abstract class Field
 
     /**
      * Validate and return the path of the view for the current field
+     *
      * @return string
      */
     public function view()
@@ -32,7 +33,7 @@ abstract class Field
         //	Convention of the view is that it wil be stored in the fields folder
         //	of the CRUD views. The name of the view has to be the snake cased
         //	version of the class name
-        $view_path = (property_exists($this, 'view_path') ? $this->view_path : 'crud::fields.' . str_replace('_', '-', snake_case(class_basename(get_class($this)))));
+        $view_path = (property_exists($this, 'view_path') ? $this->view_path : 'crud::fields.' . str_replace('_', '-', Str::snake(class_basename(get_class($this)))));
 
         //	Does the view exists
         if (!View::exists($view_path)) {
@@ -44,8 +45,10 @@ abstract class Field
 
     /**
      * Get attributes from the config
-     * @param  string $method
-     * @param  array $args
+     *
+     * @param string $method
+     * @param array  $args
+     *
      * @return all
      */
     public function __call($method, $args)
@@ -59,18 +62,23 @@ abstract class Field
 
     /**
      * Get the value of the field in the current model instance
-     * @param  Model $model
+     *
+     * @param Model $model
+     *
      * @return string
      */
     public function value($model)
     {
         $prop = $this->id();
+
         return $model->$prop;
     }
 
     /**
      * Get the value what will be shown in the form
-     * @param  Model $model
+     *
+     * @param Model $model
+     *
      * @return string
      */
     public function format($model)
@@ -78,12 +86,14 @@ abstract class Field
         //	By default the attributed of the id of the field will be returned
         if (!isset($this->config['formatter'])) {
             $prop = $this->id();
+
             return $model->$prop;
         }
 
         //	If a formatter is defined, the attribute or accesor in the model will be returned
         if (is_string($this->config['formatter'])) {
             $prop = $this->config['formatter'];
+
             return $model->$prop;
         }
 

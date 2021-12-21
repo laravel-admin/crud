@@ -3,6 +3,7 @@
 namespace LaravelAdmin\Crud\Layout;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class Component
@@ -44,7 +45,7 @@ class Component
 
     public function getResource()
     {
-        return config("{$this->field}.resources") . studly_case($this->settings['type']);
+        return config("{$this->field}.resources") . Str::studly($this->settings['type']);
     }
 
     /**
@@ -80,11 +81,11 @@ class Component
         if (isset($this->component['model'])) {
             $component_content = json_decode($this->component['model']->content, true);
         } else {
-            $component_content = $this->component['content'];
+            $component_content = isset($this->component['content']) ? $this->component['content'] : null;
         }
 
         $content = collect($this->config['fields'])->mapWithKeys(function ($item) use ($component_content) {
-            if (empty($component_content[$item['id']])) {
+            if (is_null($component_content) || empty($component_content[$item['id']])) {
                 $content = null;
             } else {
                 $content = $component_content[$item['id']];
@@ -107,7 +108,7 @@ class Component
         }
 
         if (!empty($field['type'])) {
-            $driverOptions[] = $namespace . studly_case($field['type']);
+            $driverOptions[] = $namespace . Str::studly($field['type']);
         }
 
         $driverOptions[] = Field::class;

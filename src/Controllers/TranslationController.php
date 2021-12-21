@@ -4,13 +4,15 @@ namespace LaravelAdmin\Crud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use LaravelAdmin\Crud\Fields\RenderDetail;
 use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
 
 class TranslationController extends Controller
 {
-    use Crud, CanBeSecured;
+    use Crud;
+    use CanBeSecured;
 
     public function show($id, $translation)
     {
@@ -21,10 +23,7 @@ class TranslationController extends Controller
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
         $parent_name = $parent->$select_parent_name;
         $model = $parent->translateOrNew($translation);
-        $foreign_key = snake_case(class_basename($this->model)) . '_id';
-
-        //var_dump(class_basename($this->model));
-        //var_dump($foreign_key);
+        $foreign_key = Str::snake(class_basename($this->model)) . '_id';
 
         $model->$foreign_key = $id;
 

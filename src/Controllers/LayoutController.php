@@ -4,8 +4,10 @@ namespace LaravelAdmin\Crud\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use LaravelAdmin\Crud\Layout\Config;
 use LaravelAdmin\Crud\Traits\CanBeSecured;
 use LaravelAdmin\Crud\Traits\Crud;
@@ -41,7 +43,7 @@ class LayoutController extends Controller
         $parent_name = $parent->$select_parent_name;
         $has_translation = $parent->hasTranslation($translation);
         $model = $parent->translateOrNew($translation);
-        $foreign_key = snake_case(class_basename($this->model)) . '_id';
+        $foreign_key = Str::snake(class_basename($this->model)) . '_id';
 
         if ($request->has('copy')) {
             if ($copyfrom = $this->getModelInstance($id)->translateOrNew($request->copy)) {
@@ -208,8 +210,8 @@ class LayoutController extends Controller
         }
 
         return [
-            'rules' => array_collapse($validation_rules),
-            'messages' => array_collapse($validation_messages)
+            'rules' => Arr::collapse($validation_rules),
+            'messages' => Arr::collapse($validation_messages)
         ];
     }
 }

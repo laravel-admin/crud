@@ -81,11 +81,11 @@ class Component
         if (isset($this->component['model'])) {
             $component_content = json_decode($this->component['model']->content, true);
         } else {
-            $component_content = $this->component['content'];
+            $component_content = isset($this->component['content']) ? $this->component['content'] : null;
         }
 
         $content = collect($this->config['fields'])->mapWithKeys(function ($item) use ($component_content) {
-            if (empty($component_content[$item['id']])) {
+            if (is_null($component_content) || empty($component_content[$item['id']])) {
                 $content = null;
             } else {
                 $content = $component_content[$item['id']];

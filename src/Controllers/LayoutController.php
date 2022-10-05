@@ -75,6 +75,7 @@ class LayoutController extends Controller
         if ($this->layout_model) {
             $components = $this->layout_model::where('parent_id', $model->id)->orderBy('order_id')->get()->map(function ($component) {
                 return [
+                    'component_id' => $component->id, //ag
                     'settings' => json_decode($component->settings, true),
                     'content' => json_decode($component->content, true),
                 ];

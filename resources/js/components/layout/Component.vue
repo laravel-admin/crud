@@ -50,6 +50,7 @@
       </div>
 
       <h3 class="panel-title">{{ data.settings.name }}</h3>
+      <input name="component_id" :value="data.component_id" type="hidden">
     </div>
 
     <div class="panel-body" v-show="view == 'content'">

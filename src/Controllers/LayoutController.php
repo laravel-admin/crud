@@ -74,11 +74,25 @@ class LayoutController extends Controller
 
         if ($this->layout_model) {
             $components = $this->layout_model::where('parent_id', $model->id)->orderBy('order_id')->get()->map(function ($component) {
-                return [
-                    'component_id' => $component->id, //ag
-                    'settings' => json_decode($component->settings, true),
-                    'content' => json_decode($component->content, true),
-                ];
+              if(isset($component['content'])){
+                $content = $component['content'];
+              } else {
+                $content = $component->content;
+              }
+              if(isset($component['settings'])){
+                $settings = $component['settings'];
+                //strange behavior, for page_translation_layouts the settings field is initially stored as double quoted string
+                if(! is_object($settings) ){
+                  $settings = json_decode($settings, true);
+                }
+              } else {
+                $settings = json_decode($component->settings, true);
+              }
+              return [
+                'component_id' => $component->id,
+                'settings' => $settings,
+                'content' => json_decode($content, true),
+              ];
             });
 
             $model->$field = $components;

@@ -75,7 +75,7 @@ class LayoutController extends Controller
         if ($this->layout_model) {
             $components = $this->layout_model::where('parent_id', $model->id)->orderBy('order_id')->get()->map(function ($component) {
                 return [
-                    'component_id' => $component->id, //ag
+                    'component_id' => $component->id,
                     'settings' => json_decode($component->settings, true),
                     'content' => json_decode($component->content, true),
                 ];
@@ -149,19 +149,19 @@ class LayoutController extends Controller
                     foreach ($field['children'] as $child_field) {
                         if (isset($child_field['validate_rule'])) {
                             $validation_rules[] = [
-                                "layout.*.content.{$field['id']}.*.{$child_field['id']}" => $child_field['validate_rule']
+                                "layout.*.content.{$field['id']}.*.{$child_field['id']}" => $child_field['validate_rule'],
                             ];
 
                             if (isset($child_field['validate_message'])) {
                                 foreach ($child_field['validate_message'] as $rule => $message) {
                                     $validation_messages[] = [
-                                        "layout.*.content.{$field['id']}.*.{$child_field['id']}.{$rule}" => $message
+                                        "layout.*.content.{$field['id']}.*.{$child_field['id']}.{$rule}" => $message,
                                     ];
                                 }
                             } else {
                                 $name = strtolower($child_field['name']);
                                 $validation_messages[] = [
-                                    "layout.*.content.{$field['id']}.*.{$child_field['id']}.required" => "The {$name} field is required."
+                                    "layout.*.content.{$field['id']}.*.{$child_field['id']}.required" => "The {$name} field is required.",
                                 ];
                             }
                         }
@@ -171,19 +171,19 @@ class LayoutController extends Controller
                         foreach ($child['fields'] as $child_field) {
                             if (isset($child_field['validate_rule'])) {
                                 $validation_rules[] = [
-                                    "layout.*.content.{$field['id']}.*.content.{$child_field['id']}" => $child_field['validate_rule']
+                                    "layout.*.content.{$field['id']}.*.content.{$child_field['id']}" => $child_field['validate_rule'],
                                 ];
 
                                 if (isset($child_field['validate_message'])) {
                                     foreach ($child_field['validate_message'] as $rule => $message) {
                                         $validation_messages[] = [
-                                            "layout.*.content.{$field['id']}.*.content.{$child_field['id']}.{$rule}" => $message
+                                            "layout.*.content.{$field['id']}.*.content.{$child_field['id']}.{$rule}" => $message,
                                         ];
                                     }
                                 } else {
                                     $name = strtolower($child_field['name']);
                                     $validation_messages[] = [
-                                        "layout.*.content.{$field['id']}.*.content.{$child_field['id']}.required" => "The {$name} field is required."
+                                        "layout.*.content.{$field['id']}.*.content.{$child_field['id']}.required" => "The {$name} field is required.",
                                     ];
                                 }
                             }
@@ -191,19 +191,19 @@ class LayoutController extends Controller
                     }
                 } elseif (isset($field['validate_rule'])) {
                     $validation_rules[] = [
-                        "layout.*.content.{$field['id']}" => $field['validate_rule']
+                        "layout.*.content.{$field['id']}" => $field['validate_rule'],
                     ];
 
                     if (isset($field['validate_message'])) {
                         foreach ($field['validate_message'] as $rule => $message) {
                             $validation_messages[] = [
-                                "layout.*.content.{$field['id']}.{$rule}" => $message
+                                "layout.*.content.{$field['id']}.{$rule}" => $message,
                             ];
                         }
                     } else {
                         $name = strtolower($field['name']);
                         $validation_messages[] = [
-                            "layout.*.content.{$field['id']}.required" => "The {$name} field is required."
+                            "layout.*.content.{$field['id']}.required" => "The {$name} field is required.",
                         ];
                     }
                 }
@@ -212,7 +212,7 @@ class LayoutController extends Controller
 
         return [
             'rules' => Arr::collapse($validation_rules),
-            'messages' => Arr::collapse($validation_messages)
+            'messages' => Arr::collapse($validation_messages),
         ];
     }
 }

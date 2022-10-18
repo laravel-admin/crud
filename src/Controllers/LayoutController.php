@@ -40,8 +40,10 @@ class LayoutController extends Controller
         //	Get the model instance
         $parent = $this->getModelInstance($id);
         $select_parent_name = (property_exists($this, 'parent_name')) ? $this->parent_name : 'name';
+       
         $parent_name = $parent->$select_parent_name;
         $has_translation = $parent->hasTranslation($translation);
+       
         $model = $parent->translateOrNew($translation);
         $foreign_key = Str::snake(class_basename($this->model)) . '_id';
 
@@ -124,28 +126,72 @@ class LayoutController extends Controller
         $parent = $this->getModelInstance($id);
         $model = $parent->translateOrNew($translation);
 
-        if ($this->layout_model) {
-            $this->layout_model::where('parent_id', $model->id)->delete();
-            $order = 0;
-            foreach ($request->layout as $layout) {
-                $component = new $this->layout_model();
-                $component->parent_id = $model->id;
-                $component->order_id = $order++;
-                $component->settings = json_encode($layout['settings']);
-                $component->content = json_encode($layout['content']);
-                $component->updated_by = Auth::user()->id;
-                $component->save();
-            }
-        } else {
-            $payload = [$field => $request->layout];
-
-            if (Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
-                $payload['updated_by'] = Auth::user()->id;
-            }
-
-            $model->fill($payload);
-            $model->save();
+        $ids = [];
+        //check existing records, later we see what is left needs to be deleted
+        $currentRecordIds = $this->layout_model::where('parent_id', $model->id)->get();
+        foreach($currentRecordIds as $rsWithId) {
+          $ids[$rsWithId->id] = 1;
         }
+
+        foreach ($request->layout as $keyOrder => $layout) {
+          // we have the component id from the request,
+          $totalRecords = 0;
+
+          if (isset($layout['component_id'])) {
+              $query = $this->layout_model::where('id', $layout['component_id']);
+
+              $record = $query->get();
+              $totalRecords = count($record);
+          }
+
+          if($totalRecords){
+            //update with new content
+            $this->layout_model::where('id', $layout['component_id'])
+                 ->update(
+                  [
+                    'order_id' => $keyOrder,
+                    'settings' => json_encode($layout['settings']),
+                    'content' => json_encode($layout['content']),
+                    'updated_by' => Auth::user()->id
+                  ]
+                );
+            // mark id as found, remove from list
+            unset($ids[$layout['component_id']]);
+
+          } else {
+            //insert
+            $component = new $this->layout_model();
+            $component->parent_id = $model->id;
+            $component->order_id = $keyOrder;
+            $component->settings = json_encode($layout['settings']);
+            $component->content = json_encode($layout['content']);
+            $component->updated_by = Auth::user()->id;
+            $component->save();
+          }
+        }
+
+        // if ($this->layout_model) {
+        //     $this->layout_model::where('parent_id', $model->id)->delete();
+        //     $order = 0;
+        //     foreach ($request->layout as $layout) {
+        //         $component = new $this->layout_model();
+        //         $component->parent_id = $model->id;
+        //         $component->order_id = $order++;
+        //         $component->settings = json_encode($layout['settings']);
+        //         $component->content = json_encode($layout['content']);
+        //         $component->updated_by = Auth::user()->id;
+        //         $component->save();
+        //     }
+        // } else {
+        //     $payload = [$field => $request->layout];
+
+        //     if (Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
+        //         $payload['updated_by'] = Auth::user()->id;
+        //     }
+
+        //     $model->fill($payload);
+        //     $model->save();
+        // }
 
         $this->flash('The layout is succesfully saved.', 'success');
 

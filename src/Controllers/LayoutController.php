@@ -170,6 +170,13 @@ class LayoutController extends Controller
           }
         }
 
+        //check for remaining ids, if found remove
+        if(count($ids)){
+          foreach($ids as $deleteId => $v){
+            $this->layout_model::where('id', $deleteId)->delete();
+          }  
+        }
+
         // if ($this->layout_model) {
         //     $this->layout_model::where('parent_id', $model->id)->delete();
         //     $order = 0;

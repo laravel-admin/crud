@@ -23,7 +23,7 @@
 					<div class="panel-heading"><h3 class="panel-title">General settings</h3></div>
 					<div class="panel-body">
 						@foreach ($fields->values() as $field)
-							@if ($view = $field->view()) @include($view, compact($field, $model)) @endif
+							@if ($view = $field->view()) @include($view, compact('field', 'model')) @endif
 						@endforeach
 					</div>
 				</div>

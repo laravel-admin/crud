@@ -99,6 +99,30 @@ abstract class ResourceController extends Controller
     }
 
     /**
+     * Show the show view of the model
+     * @param  int $id The ID of the model
+     * @return Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $this->checkRole();
+
+        //	Get the model instance
+        $model = $this->getModelInstance($id);
+
+        $items = $this->getFieldsForEdit();
+        foreach ($items as $index => $item) {
+            $items[$index]['disabled'] = true;
+        }
+
+        //	Get all the fields wich will be shown in the edit form
+        $fields = new RenderDetail($items);
+
+        //	Render the view
+        return view('crud::templates.show', $this->parseViewData(compact('model', 'fields')));
+    }
+
+    /**
      * Show the edit form to update the model
      * @param  int $id The ID of the model
      * @return Illuminate\Http\Response

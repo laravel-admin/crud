@@ -185,15 +185,6 @@ trait Crud
     }
 
     /**
-     * Get all fields for the edit form
-     * @return array
-     */
-    public function getFieldsForEdit()
-    {
-        return $this->getFieldsForCreate();
-    }
-
-    /**
      * Get all fields the list table
      * @return array
      */

@@ -15,11 +15,17 @@
                 <a href="{!! route("{$route}index") !!}" class="btn btn-default">Back</a>
             </div>
 
-            <h1>Edit {{ $singular_name }}</h1>
+            <h1>Show {{ $singular_name }}</h1>
         </div>
 
         <div class="row">
-			<div class="col-xs-12">
+            @if (!empty($submenu))
+				@include('crud::templates.submenu')
+            	<div class="col-md-10">
+			@else
+				<div class="col-xs-12">
+			@endif
+            
                 <div class="panel panel-default">
                     <div class="panel-heading"><h3 class="panel-title">General settings</h3></div>
                     <div class="panel-body">

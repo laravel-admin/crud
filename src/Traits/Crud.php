@@ -185,19 +185,10 @@ trait Crud
     }
 
     /**
-     * Get all fields for the edit form
-     * @return array
-     */
-    protected function getFieldsForEdit()
-    {
-        return $this->getFieldsForCreate();
-    }
-
-    /**
      * Get all fields the list table
      * @return array
      */
-    protected function getFieldsForList()
+    public function getFieldsForList()
     {
         return [
             ['id' => 'name', 'label' => 'Name'],
@@ -232,6 +223,7 @@ trait Crud
         $data['allow_search'] = (property_exists($this, 'allow_search')) ? $this->allow_search : true;
         $data['allow_create'] = (property_exists($this, 'allow_create')) ? $this->allow_create : true;
         $data['allow_delete'] = (property_exists($this, 'allow_delete')) ? $this->allow_delete : true;
+        $data['allow_edit'] = (property_exists($this, 'allow_edit')) ? $this->allow_edit : true;
 
         //	TODO: What else
 

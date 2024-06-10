@@ -15,7 +15,11 @@
 			</thead>
 			<tbody>
 			@foreach ($records as $record)
-			<tr data-href="{{ route("{$route}edit", $record->id) }}" @if(!is_null($record->is_active) && !$record->is_active)class="danger"@endif>
+			@if($allow_edit)
+				<tr data-href="{{ route("{$route}edit", $record->id) }}" @if(!is_null($record->is_active) && !$record->is_active)class="danger"@endif>
+			@else
+				<tr data-href="{{ route("{$route}show", $record->id) }}" @if(!is_null($record->is_active) && !$record->is_active)class="danger"@endif>
+			@endif
 				@if($handle_bulk)<td><input type="checkbox" name="record[{!! $record->id !!}]" value="{!! $record->id !!}" class="check-item"></td>@endif
 				@foreach ($fields->values($record) as $item) <td> {{ $item }} </td> @endforeach
 			</tr>

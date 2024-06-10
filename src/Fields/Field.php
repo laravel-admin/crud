@@ -74,6 +74,15 @@ abstract class Field
         return $model->$prop;
     }
 
+    public function disabled() 
+    {
+        if (array_key_exists('disabled', $this->config)) {
+            return $this->config['disabled'];
+        }
+
+        return false;
+    }
+
     /**
      * Get the value what will be shown in the form
      *

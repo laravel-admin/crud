@@ -15,7 +15,7 @@
 				    {{ strtoupper($translation) }} <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">@foreach ($languages as $key=>$value)
-				    <li><a href="{{ route("{$route}show", [$model->$foreign_key, $key]) }}">{{ strtoupper($key) }}</a></li>
+				    <li><a href="{{ route("{$route}edit", [$model->$foreign_key, $key]) }}">{{ strtoupper($key) }}</a></li>
 					@endforeach</ul>
 				</div>
 				@endif

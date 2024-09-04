@@ -12,6 +12,7 @@ trait Crud
     /**
      * Get the model based on the class wich is defined in the controller
      * An example of a call is $this->model('find', 1) is the same as User::find(1)
+     *
      * @return Builder
      */
     protected function model()
@@ -26,7 +27,7 @@ trait Crud
         $method = array_shift($args);
 
         if (!$method) {
-            return new $this->model;
+            return new $this->model();
         }
 
         //	Execute the class method with the given arguments
@@ -35,6 +36,7 @@ trait Crud
 
     /**
      * Validate the model name which is specified in the controller
+     *
      * @return void
      */
     protected function validateModel()
@@ -54,7 +56,9 @@ trait Crud
 
     /**
      * Get an instance of a model by the given id
-     * @param  int $id
+     *
+     * @param int $id
+     *
      * @return Collection
      */
     protected function getModelInstance($id)
@@ -65,6 +69,7 @@ trait Crud
     /**
      * Get the default validation rules when storing a new model
      * This method can be overridden by the controller
+     *
      * @return array
      */
     protected function getValidationRulesOnStore()
@@ -77,15 +82,17 @@ trait Crud
     /**
      * Get the default validation rules when storing a new model
      * This method can be overridden by the controller
+     *
      * @return array
      */
     protected function getValidationMessagesOnStore()
     {
-        return $this->getValidationRulesOnStore();
+        return [];
     }
 
     /**
      * Get all valid keys of post data what will be saved in the database
+     *
      * @return array
      */
     protected function getPayloadOnStore(array $payload)
@@ -100,6 +107,7 @@ trait Crud
 
     /**
      * Get all valid keys of post data what will be updated in the database
+     *
      * @return array
      */
     protected function getPayloadOnUpdate(array $payload)
@@ -128,6 +136,7 @@ trait Crud
 
     /**
      * Format the valid keys of post data
+     *
      * @return array
      */
     private function formatPayload($fields, $payload)
@@ -153,6 +162,7 @@ trait Crud
 
     /**
      * Get the default validation rules when storing a new model
+     *
      * @return array
      */
     protected function getValidationRulesOnUpdate()
@@ -162,15 +172,17 @@ trait Crud
 
     /**
      * Get the default validation rules when storing a new model
+     *
      * @return array
      */
     protected function getValidationMessagesOnUpdate()
     {
-        return $this->getValidationRulesOnUpdate();
+        return [];
     }
 
     /**
      * Get all fields for the create form
+     *
      * @return array
      */
     protected function getFieldsForCreate()
@@ -186,6 +198,7 @@ trait Crud
 
     /**
      * Get all fields the list table
+     *
      * @return array
      */
     public function getFieldsForList()
@@ -200,7 +213,7 @@ trait Crud
 
     /**
      * The data to transfer default to all views
-     * @param  $data
+     *
      * @return array
      */
     protected function parseViewData(array $data = [])
@@ -232,8 +245,6 @@ trait Crud
 
     /**
      * Get submenu
-     *
-     * @return
      */
     protected function getSubmenu()
     {
@@ -265,8 +276,6 @@ trait Crud
 
     /**
      * Get additional submenu
-     *
-     * @return
      */
     protected function getAdditionalSubmenu()
     {
@@ -298,8 +307,6 @@ trait Crud
 
     /**
      * Get submenu for bulk actions
-     *
-     * @return
      */
     protected function getSubmenuBulk()
     {
@@ -328,8 +335,9 @@ trait Crud
 
     /**
      * A helper for calling a route only based on the crud action
-     * @param  string $action
-     * @param  $params
+     *
+     * @param string $action
+     *
      * @return Route
      */
     protected function route($action, $params = null)
@@ -339,8 +347,9 @@ trait Crud
 
     /**
      * A helper for redirecting directly to a route only based on the crud action
-     * @param  string $action
-     * @param  $params
+     *
+     * @param string $action
+     *
      * @return Response
      */
     protected function redirect($action, $params = null)
@@ -350,6 +359,7 @@ trait Crud
 
     /**
      * Determine the master layout file
+     *
      * @return string
      */
     protected function layout()
@@ -368,6 +378,7 @@ trait Crud
 
     /**
      * Send flash message if installed
+     *
      * @return [type] [description]
      */
     protected function flash($message, $type = 'success')

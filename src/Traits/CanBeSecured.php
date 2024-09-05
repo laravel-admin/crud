@@ -17,7 +17,7 @@ trait CanBeSecured
     protected function checkRole() : void
     {
         if (!isset($this->authorizedRoles)) {
-            abort(500, 'You must define $this->authorizedRoles in all Administration controllers');
+            throw new \Exception('You must define $this->authorizedRoles in controller ' . get_class($this));
         }
 
         $authorized = false;

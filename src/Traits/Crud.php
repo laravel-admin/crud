@@ -81,7 +81,7 @@ trait Crud
      */
     protected function getValidationMessagesOnStore()
     {
-        return $this->getValidationRulesOnStore();
+        return [];
     }
 
     /**
@@ -166,7 +166,7 @@ trait Crud
      */
     protected function getValidationMessagesOnUpdate()
     {
-        return $this->getValidationRulesOnUpdate();
+        return [];
     }
 
     /**

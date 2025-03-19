@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use LaravelAdmin\Crud\Layout\Config;
 use LaravelAdmin\Crud\Traits\CanBeSecured;
@@ -125,12 +124,17 @@ class LayoutController extends Controller
         } else {
             $payload = [$field => $request->layout];
 
-            if (Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
-                $payload['updated_by'] = Auth::user()->id;
+            if (\Schema::hasColumn($this->model()->getTable(), 'updated_by')) {
+                $payload['updated_by'] = \Auth::user()->id;
             }
 
             $model->fill($payload);
             $model->save();
+        }
+
+        if (\Schema::hasColumn($parent->getTable(), 'updated_by')) {
+            $parent->updated_by = \Auth::user()->id;
+            $parent->save();
         }
 
         $this->flash('The layout is succesfully saved.', 'success');

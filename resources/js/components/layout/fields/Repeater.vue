@@ -10,7 +10,7 @@
             <component
               :is="field.type"
               :index="key"
-              :key="generateUniqueId(key, field.id)"
+              :key="generateUniqueId(item, field.id)"
               :settings="field"
               :data="getDataForChild(key, field.id)"
               @update="updateChild"
@@ -72,6 +72,15 @@ export default {
         //	We will work with the data instead of the prop in this component
         if (this.data) {
             this.content = this.data;
+
+            // Add IDs to items
+            this.content.forEach(item => {
+                if (!item.id) {
+                    item.id = Math.random()
+                        .toString(36)
+                        .substring(2, 16);
+                }
+            });
         }
     },
 
@@ -87,9 +96,8 @@ export default {
     },
 
     methods: {
-        generateUniqueId(key, type) {
-            let id = (Math.random() * (key + 1)).toString(36).substr(2, 16);
-            return type + key + id;
+        generateUniqueId(item, fieldId) {
+            return fieldId + item.id;
         },
 
         //	Pass the data for each field
